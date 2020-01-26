@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Minim",
+  "description": "A minimal newtab for chrome",
+  "version": "2.0.0",
+  "content_security_policy": "script-src 'self' 'sha256-mn4CeUKj/dpqRPncZNAZcLhwdCrQXizG39l/7V61Qos=';object-src 'self' 'sha256-mn4CeUKj/dpqRPncZNAZcLhwdCrQXizG39l/7V61Qos=';",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "icons": [
+    {
+      "src": "icon16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "icon48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "icon128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+
+  "name": "Minim: A minimalist new-tab",
+  "short_name":"Minim",
+  "description": "Ultra Minimalistic New Tab for Chrome",
+  "version": "0.1.0",
+  "content_security_policy": "script-src 'self' 'sha256-mn4CeUKj/dpqRPncZNAZcLhwdCrQXizG39l/7V61Qos=';object-src 'self' 'sha256-mn4CeUKj/dpqRPncZNAZcLhwdCrQXizG39l/7V61Qos=';",
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
+  "icons": { "128": "icon128.png" }
+
+}
