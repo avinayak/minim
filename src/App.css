@@ -9,6 +9,11 @@
   user-select: none;
 }
 
+.info {
+  font-family: "Material Icons";
+  font-size: 16px !important;
+}
+
 @font-face {
   font-family: Circular;
   src: url("CircularStd-Book.ttf");
@@ -21,6 +26,11 @@
 @font-face {
   font-family: SharpGrotesk;
   src: url("SharpGrotesk.ttf");
+}
+
+@font-face {
+  font-family: Milea;
+  src: url("Milea.ttf");
 }
 
 .buttons:hover {
@@ -194,4 +204,36 @@
 
 .modal-backdrop.show {
   opacity: 0 !important;
+}
+
+
+.dots {
+  background: transparent;
+  background-image: radial-gradient(#ffffff57, 1px, transparent 0);
+  background-size: 30px 30px;
+}
+
+.modal-content {
+  box-shadow: -25px 0px 91px -13px rgba(0,0,0,0.55);
+  opacity: 0.9;
+  backdrop-filter: blur(3px);
+  border: none;
+}
+
+.toggle-button {
+  color: #212529;
+  font-family: "Material Icons";
+  font-size: 20px !important;
+  display: inline-block;
+  cursor: pointer;
+  padding: 0px 18px;
+  user-select: none;
+}
+
+.modal-button-row{
+  position: absolute;
+  bottom: 25px;
+  text-align: center;
+  width: 100%;
+  padding-right: 63px;
 }

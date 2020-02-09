@@ -1,18 +1,40 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Modal, Form, Tabs, Tab } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Modal,
+  Form,
+  Tabs,
+  Tab,
+  OverlayTrigger,
+  Tooltip
+} from "react-bootstrap";
 import ClockWidget from "./ClockWidget";
 import CustomMessageWidget from "./CustomMessageWidget";
 import colors from "./colors";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
-const UNSPLASH_URL = `https://source.unsplash.com/random/${window.screen.width}x${window.screen.height}/`;
+const Tooltipify = ({ message, children }) => {
+  return (
+    <OverlayTrigger
+      placement={"top"}
+      overlay={<Tooltip id={`tooltipiii`}>{message}</Tooltip>}
+    >
+      {children}
+    </OverlayTrigger>
+  );
+};
+
+const UNSPLASH_URL = `https://source.unsplash.com/collection/1459961/${window.screen.width}x${window.screen.height}/`;
 export class Ikigai extends Component {
   constructor() {
     super();
     this.state = {
       modalVisible: false,
       background_mode: localStorage.getItem("background_mode"),
+      dots: localStorage.getItem("dots"),
       filter: "saturate(0%)",
       tint: 1,
       tint_value: parseFloat(localStorage.getItem("tint_value")),
@@ -38,7 +60,8 @@ export class Ikigai extends Component {
       tint_value: 0.0,
       color_index: 0,
       background_mode: "flat",
-      image_tags: "",
+      dots: 0,
+      image_tags: "collection:1459961",
       image_foreground: "#ffffff",
       clock_seperator: "colon",
       clock_format: "12H",
@@ -70,11 +93,12 @@ export class Ikigai extends Component {
     });
   }
 
-
   keyHandle = event => {
-
-    if (event.keyCode == 83) {
+    if (event.keyCode == 83 && !this.state.modalVisible) {
       this.invertColors();
+    }
+    if (event.keyCode == 68 && !this.state.modalVisible) {
+      this.toggleDots();
     }
   };
 
@@ -88,16 +112,37 @@ export class Ikigai extends Component {
 
   invertColors = () => {
     let new_image_foreground =
-      this.state.image_foreground == "#ffffff" ? "#111111" : "#ffffff";
+      this.state.image_foreground == "#ffffff" ? "#212529" : "#ffffff";
     this.setState({ image_foreground: new_image_foreground });
     localStorage.setItem("image_foreground", new_image_foreground);
   };
 
+  toggleDots = () => {
+    let nd = this.state.dots == 0 ? 1 : 0;
+    this.setState({ dots: nd });
+    localStorage.setItem("dots", nd);
+  };
+
   unsplash_url_fix = () => {
-    let url = `https://source.unsplash.com/random/${window.screen.width}x${window.screen.height}/`;
-    return this.state.image_tags === ""
-      ? url
-      : url + `?/${this.state.image_tags}`;
+    let url = "";
+    let rand = "random/";
+    let base = `https://source.unsplash.com/`;
+    let dimen = `${window.screen.width}x${window.screen.height}/`;
+    if (this.state.image_tags === "") {
+      url = base + rand + dimen;
+    } else if (this.state.image_tags.startsWith("user:")) {
+      let user = this.state.image_tags.split(":")[1];
+      url = base + `user/${user}/` + dimen;
+    } else if (this.state.image_tags.startsWith("likes:")) {
+      let user = this.state.image_tags.split(":")[1];
+      url = base + `user/${user}/likes/` + dimen;
+    } else if (this.state.image_tags.startsWith("collection:")) {
+      let cid = this.state.image_tags.split(":")[1];
+      url = base + `collection/${cid}/` + dimen;
+    } else {
+      url = base + rand + dimen + `?/${this.state.image_tags}`;
+    }
+    return url;
   };
 
   refetchAndSetImage = () => {
@@ -107,7 +152,14 @@ export class Ikigai extends Component {
     });
   };
 
+  openImage = () => {
+    let imurl = localStorage.getItem("unsplash_image_download");
+    var win = window.open(imurl, '_blank');
+    win.focus();
+  };
+
   toDataUrl = (url, callback) => {
+    console.log(url);
     this.setState({ filter: "saturate(0%)", loadingImage: true });
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
@@ -134,6 +186,7 @@ export class Ikigai extends Component {
       modalVisible,
       loadingImage,
       background_mode,
+      dots,
       image,
       filter,
       font,
@@ -227,6 +280,8 @@ export class Ikigai extends Component {
           }}
         />
 
+        {dots == 1 && <div className="tint-layer dots" />}
+
         <Modal
           size="lg"
           animation={false}
@@ -245,11 +300,8 @@ export class Ikigai extends Component {
                     onChange={e => {
                       localStorage.setItem("background_mode", e.target.value);
                       localStorage.setItem("color_index", 0);
-                      
-                      let tintv =
-                        e.target.value !== "image"
-                          ? 0.0
-                          : 0.17;
+
+                      let tintv = e.target.value !== "image" ? 0.0 : 0.17;
                       this.setState({
                         background_mode: e.target.value,
                         tint_value: tintv,
@@ -277,7 +329,7 @@ export class Ikigai extends Component {
                     >
                       <Form.Label>Color</Form.Label>
                       <Form.Control
-                        defaultValue={this.state.color_index+""}
+                        defaultValue={this.state.color_index + ""}
                         as="select"
                       >
                         {colors[this.state.background_mode].map((c, i) => {
@@ -289,23 +341,37 @@ export class Ikigai extends Component {
                   <div>
                     {this.state.background_mode == "image" && (
                       <div>
-                        <a
-                          target="_blank"
-                          href={localStorage.getItem("unsplash_image_download")}
-                        >
-                          Download Current Image
-                        </a>
                         <Form.Group
                           onChange={e => {
                             localStorage.setItem("image_tags", e.target.value);
                             this.setState({ image_tags: e.target.value });
                           }}
                         >
-                          <Form.Label>Tags</Form.Label>
+                          <OverlayTrigger
+                            key={"left"}
+                            placement={"left"}
+                            overlay={
+                              <Tooltip id={`tooltipiii`}>
+                                <ul>
+                                  <li>
+                                    You can place comma seperated tags here (eg:
+                                    Nature, Motivation, Art)
+                                  </li>
+                                  <li>
+                                    Unsplash collections: collection:9270463
+                                  </li>
+                                  <li>Unsplash User Images: user:atulvi</li>
+                                  <li>Unsplash User Likes: likes:atulvi</li>
+                                </ul>
+                              </Tooltip>
+                            }
+                          >
+                            <Form.Label>Unsplash Tags</Form.Label>
+                          </OverlayTrigger>
                           <Form.Control
-                            placeholder="Tags (eg: Nature, Motivation, Art)"
+                            placeholder="Nature, art, wallpaper"
                             defaultValue={image_tags}
-                            as="textarea"
+                            as="input"
                             rows="3"
                           />
                         </Form.Group>
@@ -324,6 +390,7 @@ export class Ikigai extends Component {
                       });
                     }}
                   />
+                  <br />
                   <Form.Group
                     onChange={e => {
                       localStorage.setItem("font", e.target.value);
@@ -335,8 +402,49 @@ export class Ikigai extends Component {
                       <option value="Circular">Circular</option>
                       <option value="Futura">Futura</option>
                       <option value="SharpGrotesk">SharpGrotesk</option>
+                      <option value="Milea">Milea</option>
                     </Form.Control>
                   </Form.Group>
+                  <div className="modal-button-row">
+                    <Tooltipify message="Texture">
+                      <div className="toggle-button" onClick={this.toggleDots}>
+                        &#xe3a5;
+                      </div>
+                    </Tooltipify>
+
+                    {background_mode == "image" && (
+                      <Tooltipify message="Invert">
+                        <div
+                          className="toggle-button"
+                          onClick={this.invertColors}
+                        >
+                          &#xe891;
+                        </div>
+                      </Tooltipify>
+                    )}
+
+                    {background_mode == "image" && (
+                      <Tooltipify message="Change Background">
+                        <div
+                          className="toggle-button"
+                          onClick={this.refetchAndSetImage}
+                        >
+                          &#xe332;
+                        </div>
+                      </Tooltipify>
+                    )}
+
+                    {background_mode == "image" && (
+                      <Tooltipify message="Open Image">
+                        <div
+                          className="toggle-button"
+                          onClick={this.openImage}
+                        >
+                          &#xe89e;
+                        </div>
+                      </Tooltipify>
+                    )}
+                  </div>
                 </Tab>
                 <Tab eventKey="widget" title="Widget">
                   <br />
@@ -353,6 +461,7 @@ export class Ikigai extends Component {
                       ))}
                     </Form.Control>
                   </Form.Group>
+    
                   {widget == "message" && (
                     <div>
                       <Row className="show-grid">
