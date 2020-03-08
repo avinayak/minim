@@ -15,6 +15,9 @@ import CustomMessageWidget from "./CustomMessageWidget";
 import colors from "./colors";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import UnsplashSelect from "./UnsplashSelect";
+import WeatherWidget from "./WeatherWidget";
+import PlacesSelect from "./PlacesSelect";
 
 const Tooltipify = ({ message, children }) => {
   return (
@@ -27,49 +30,96 @@ const Tooltipify = ({ message, children }) => {
   );
 };
 
+let timer = null;
+
 const UNSPLASH_URL = `https://source.unsplash.com/collection/1459961/${window.screen.width}x${window.screen.height}/`;
 export class Ikigai extends Component {
   constructor() {
     super();
     this.state = {
       modalVisible: false,
+      refresh_enabled: true,
       background_mode: localStorage.getItem("background_mode"),
       dots: localStorage.getItem("dots"),
       filter: "saturate(0%)",
       tint: 1,
       tint_value: parseFloat(localStorage.getItem("tint_value")),
+      image_index: localStorage.getItem("image_index"),
       image: localStorage.getItem("image"),
+      image2: localStorage.getItem("image2"),
       loadingImage: false,
       font: localStorage.getItem("font"),
       widget: localStorage.getItem("widget"),
       clock_border: localStorage.getItem("clock_border"),
       clock_seperator: localStorage.getItem("clock_seperator"),
       clock_format: localStorage.getItem("clock_format"),
+      background_cycle: localStorage.getItem("background_cycle"),
+      temprature_unit: localStorage.getItem("temprature_unit"),
       message_size: localStorage.getItem("message_size"),
       message: localStorage.getItem("message"),
       image_foreground: localStorage.getItem("image_foreground"),
       image_tags: localStorage.getItem("image_tags"),
-      color_index: localStorage.getItem("color_index")
+      color_index: localStorage.getItem("color_index"),
+      location: localStorage.getItem("location")
     };
+
+    if (!localStorage.getItem("collections")) {
+      localStorage.setItem(
+        "collections",
+        JSON.stringify([
+          { value: "collection:1459961", label: "Unsplash Daily" },
+          { value: "collection:1065976", label: "Wallpapers" },
+          { value: "collection:3330445", label: "Textures & Patterns" },
+          { value: "collection:9510092", label: "Abstract" },
+          { value: "collection:17098", label: "Floral Beauty" },
+          { value: "collection:9270463", label: "Lush Life" }
+        ])
+      );
+    }
+
+    if (!localStorage.getItem("collections")) {
+      localStorage.setItem(
+        "collections",
+        JSON.stringify([{ value: "collection:1459961", label: "Ginza,Tokyo" }])
+      );
+    }
+  }
+
+  unixToHumanTime(unix) {
+    var date = new Date(parseInt(unix) * 1000);
+    return date;
   }
   componentWillMount() {
     document.addEventListener("keydown", this.keyHandle, false);
     // get the first image on the first run, so user doesnt have to wait when
     // settings is changed
+    if (!localStorage.getItem("weather_last_updated")) {
+      localStorage.setItem("weather_last_updated", "0");
+    }
+    if (!localStorage.getItem("background_last_updated")) {
+      localStorage.setItem("background_last_updated", "0");
+    }
     let default_values = {
       tint_value: 0.0,
       color_index: 0,
       background_mode: "flat",
-      dots: 0,
+      dots: "0",
       image_tags: "collection:1459961",
       image_foreground: "#ffffff",
       clock_seperator: "colon",
       clock_format: "12H",
+      image_index: "0",
+      temprature_unit: "C",
       clock_border: "none",
       message_size: "50",
       message: "Hello!",
       widget: "clock",
-      font: "Circular"
+      font: "Circular",
+      background_cycle: "never",
+      location: JSON.stringify({
+        value: "139.7594549,35.6828387",
+        label: "Tokyo, Japan"
+      })
     };
     Object.keys(default_values).forEach(key => {
       if (!localStorage.getItem(key)) {
@@ -83,6 +133,59 @@ export class Ikigai extends Component {
         localStorage.setItem("image", b64img);
       });
     }
+    if (!localStorage.getItem("image2")) {
+      this.toDataUrl(UNSPLASH_URL, b64img => {
+        this.setState({ image2: b64img });
+        localStorage.setItem("image2", b64img);
+      });
+    }
+
+    if (this.state.background_cycle === "tab") {
+      this.refetchAndSetImageHidden();
+      if (this.state.image_index === "0") {
+        localStorage.setItem("image_index", "1");
+        this.setState({ image_index: "1" });
+      } else {
+        localStorage.setItem("image_index", "0");
+        this.setState({ image_index: "0" });
+      }
+    }
+
+    timer = setInterval(() => {
+      if (
+        this.state.background_cycle !== "tab" &&
+        this.state.background_cycle !== "never"
+      ) {
+        let background_last_updated = parseInt(
+          localStorage.getItem("background_last_updated")
+        );
+        let time_now = Math.round(new Date().getTime() / 1000);
+        let background_update_freq = parseInt(this.state.background_cycle);
+
+        if (background_last_updated + background_update_freq <= time_now) {
+          this.refetchAndSetImageHidden();
+          let time_now = Math.round(new Date().getTime() / 1000);
+          localStorage.setItem("background_last_updated", time_now);
+
+          console.log(
+            `Next background update at ${this.unixToHumanTime(
+              background_last_updated + background_update_freq
+            )}`
+          );
+
+          if (this.state.image_index === "0") {
+            localStorage.setItem("image_index", "1");
+            this.setState({ image_index: "1" });
+          } else {
+            localStorage.setItem("image_index", "0");
+            this.setState({ image_index: "0" });
+          }
+        }
+      }
+    }, 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(timer);
   }
   componentDidMount() {
     document.addEventListener("keydown", this.keyHandle, false);
@@ -91,13 +194,14 @@ export class Ikigai extends Component {
       tint: this.state.tint_value,
       filter: "saturate(100%)"
     });
+    this.logNextBackgroundChange();
   }
 
   keyHandle = event => {
-    if (event.keyCode == 83 && !this.state.modalVisible) {
+    if (event.keyCode === 83 && !this.state.modalVisible) {
       this.invertColors();
     }
-    if (event.keyCode == 68 && !this.state.modalVisible) {
+    if (event.keyCode === 68 && !this.state.modalVisible) {
       this.toggleDots();
     }
   };
@@ -112,13 +216,13 @@ export class Ikigai extends Component {
 
   invertColors = () => {
     let new_image_foreground =
-      this.state.image_foreground == "#ffffff" ? "#212529" : "#ffffff";
+      this.state.image_foreground === "#ffffff" ? "#212529" : "#ffffff";
     this.setState({ image_foreground: new_image_foreground });
     localStorage.setItem("image_foreground", new_image_foreground);
   };
 
   toggleDots = () => {
-    let nd = this.state.dots == 0 ? 1 : 0;
+    let nd = this.state.dots === "0" ? "1" : "0";
     this.setState({ dots: nd });
     localStorage.setItem("dots", nd);
   };
@@ -128,33 +232,79 @@ export class Ikigai extends Component {
     let rand = "random/";
     let base = `https://source.unsplash.com/`;
     let dimen = `${window.screen.width}x${window.screen.height}/`;
-    if (this.state.image_tags === "") {
+    let image_tags = localStorage.getItem("image_tags");
+    if (image_tags === "") {
       url = base + rand + dimen;
-    } else if (this.state.image_tags.startsWith("user:")) {
-      let user = this.state.image_tags.split(":")[1];
+    } else if (image_tags.startsWith("user:")) {
+      let user = image_tags.split(":")[1];
       url = base + `user/${user}/` + dimen;
-    } else if (this.state.image_tags.startsWith("likes:")) {
-      let user = this.state.image_tags.split(":")[1];
+    } else if (image_tags.startsWith("likes:")) {
+      let user = image_tags.split(":")[1];
       url = base + `user/${user}/likes/` + dimen;
-    } else if (this.state.image_tags.startsWith("collection:")) {
-      let cid = this.state.image_tags.split(":")[1];
+    } else if (image_tags.startsWith("collection:")) {
+      let cid = image_tags.split(":")[1];
       url = base + `collection/${cid}/` + dimen;
     } else {
-      url = base + rand + dimen + `?/${this.state.image_tags}`;
+      url = base + rand + dimen + `?/${image_tags}`;
     }
     return url;
   };
 
-  refetchAndSetImage = () => {
+  refetchAndSetImageHidden = () => {
     this.toDataUrl(this.unsplash_url_fix(), b64img => {
-      localStorage.setItem("image", b64img);
-      this.setState({ image: b64img });
+      if (this.state.image_index === "1") {
+        localStorage.setItem("image", b64img);
+        this.setState({ image: b64img });
+      } else {
+        localStorage.setItem("image2", b64img);
+        this.setState({ image2: b64img });
+      }
     });
+  };
+
+  logNextBackgroundChange = () => {
+    if (
+      this.state.background_cycle !== "tab" &&
+      this.state.background_cycle !== "never"
+    ) {
+      let background_update_freq = parseInt(this.state.background_cycle);
+      let background_last_updated = parseInt(
+        localStorage.getItem("background_last_updated")
+      );
+
+      console.log(
+        `Next Background change at ${this.unixToHumanTime(
+          background_update_freq + background_last_updated
+        )}`
+      );
+    }
+  };
+  refetchAndSetImage = () => {
+    if (this.state.refresh_enabled) {
+      this.setState({ refresh_enabled: false });
+      setTimeout(() => {
+        this.setState({ refresh_enabled: true });
+      }, 2700);
+      this.toDataUrl(this.unsplash_url_fix(), b64img => {
+        let time_now = Math.round(new Date().getTime() / 1000);
+        localStorage.setItem("background_last_updated", time_now);
+
+        this.logNextBackgroundChange();
+
+        if (this.state.image_index === "0") {
+          localStorage.setItem("image", b64img);
+          this.setState({ image: b64img });
+        } else {
+          localStorage.setItem("image2", b64img);
+          this.setState({ image2: b64img });
+        }
+      });
+    }
   };
 
   openImage = () => {
     let imurl = localStorage.getItem("unsplash_image_download");
-    var win = window.open(imurl, '_blank');
+    var win = window.open(imurl, "_blank");
     win.focus();
   };
 
@@ -179,7 +329,8 @@ export class Ikigai extends Component {
   render() {
     let widgets = {
       clock: ClockWidget,
-      message: CustomMessageWidget
+      message: CustomMessageWidget,
+      weather: WeatherWidget
     };
 
     let {
@@ -188,25 +339,31 @@ export class Ikigai extends Component {
       background_mode,
       dots,
       image,
+      image2,
+      image_index,
       filter,
       font,
+      background_cycle,
+      location,
       widget,
       clock_border,
       clock_seperator,
       clock_format,
+      temprature_unit,
       message_size,
       message,
       image_foreground,
       image_tags,
       color_index
     } = this.state;
+
+    if (image_index === "1") image = image2;
     let WidgetComponent = widgets[widget];
     let background =
-      background_mode != "image"
+      background_mode !== "image"
         ? {
             background:
-              colors[this.state.background_mode][this.state.color_index]
-                .background
+              colors[this.state.background_mode][color_index].background
           }
         : {
             background: `url(${image}) no-repeat center center`,
@@ -214,8 +371,8 @@ export class Ikigai extends Component {
           };
 
     let foreground =
-      background_mode != "image"
-        ? colors[this.state.background_mode][this.state.color_index].foreground
+      background_mode !== "image"
+        ? colors[this.state.background_mode][color_index].foreground
         : image_foreground;
 
     return (
@@ -227,8 +384,10 @@ export class Ikigai extends Component {
             clock_border={clock_border}
             clock_seperator={clock_seperator}
             clock_format={clock_format}
+            temprature_unit={temprature_unit}
             message_size={message_size}
             message={message}
+            location={location}
           />
         </div>
         <div>
@@ -239,48 +398,50 @@ export class Ikigai extends Component {
           )}
         </div>
         <div className="buttons">
-          {background_mode == "image" && (
+          {background_mode === "image" && (
             <span>
-              {/* <div
-                style={{
-                  color: foreground
-                }}
-                className={`settings-button`}
-                onClick={this.invertColors}
-              >
-                &#xe891;
-              </div> */}
-              <div
-                style={{
-                  color: foreground
-                }}
-                className="settings-button"
-                onClick={this.refetchAndSetImage}
-              >
-                &#xe332;
-              </div>
+              <Tooltipify message="Change Background">
+                <div
+                  style={{
+                    color: foreground
+                  }}
+                  className={`settings-button ${!this.state.refresh_enabled &&
+                    "not-allowed"}`}
+                  onClick={this.refetchAndSetImage}
+                >
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: this.state.refresh_enabled
+                        ? "&#xe332;"
+                        : "&#xe88b;"
+                    }}
+                  />
+                </div>
+              </Tooltipify>
             </span>
           )}
-          <div
-            style={{
-              color: foreground
-            }}
-            className="settings-button"
-            onClick={this.handleOpen}
-          >
-            &#xe8b8;
-          </div>
+          <Tooltipify message="Settings">
+            <div
+              style={{
+                color: foreground
+              }}
+              className="settings-button"
+              onClick={this.handleOpen}
+            >
+              &#xe8b8;
+            </div>
+          </Tooltipify>
         </div>
         <div className="background-layer" style={background} />
         <div
           className="tint-layer"
           style={{
             opacity: this.state.tint,
-            background: image_foreground == "#ffffff" ? "#111111" : "#ffffff"
+            background: image_foreground === "#ffffff" ? "#111111" : "#ffffff"
           }}
         />
 
-        {dots == 1 && <div className="tint-layer dots" />}
+        {dots === "1" && <div className="tint-layer dots" />}
 
         <Modal
           size="lg"
@@ -302,6 +463,8 @@ export class Ikigai extends Component {
                       localStorage.setItem("color_index", 0);
 
                       let tintv = e.target.value !== "image" ? 0.0 : 0.17;
+                      localStorage.setItem("tint_value", tintv);
+                      localStorage.setItem("tint", tintv);
                       this.setState({
                         background_mode: e.target.value,
                         tint_value: tintv,
@@ -317,8 +480,8 @@ export class Ikigai extends Component {
                       <option value="image">Image</option>
                     </Form.Control>
                   </Form.Group>
-                  {(this.state.background_mode == "flat" ||
-                    this.state.background_mode == "gradient") && (
+                  {(this.state.background_mode === "flat" ||
+                    this.state.background_mode === "gradient") && (
                     <Form.Group
                       onChange={e => {
                         localStorage.setItem("color_index", e.target.value);
@@ -339,40 +502,18 @@ export class Ikigai extends Component {
                     </Form.Group>
                   )}
                   <div>
-                    {this.state.background_mode == "image" && (
+                    {this.state.background_mode === "image" && (
                       <div>
-                        <Form.Group
-                          onChange={e => {
-                            localStorage.setItem("image_tags", e.target.value);
-                            this.setState({ image_tags: e.target.value });
-                          }}
-                        >
-                          <OverlayTrigger
-                            key={"left"}
-                            placement={"left"}
-                            overlay={
-                              <Tooltip id={`tooltipiii`}>
-                                <ul>
-                                  <li>
-                                    You can place comma seperated tags here (eg:
-                                    Nature, Motivation, Art)
-                                  </li>
-                                  <li>
-                                    Unsplash collections: collection:9270463
-                                  </li>
-                                  <li>Unsplash User Images: user:atulvi</li>
-                                  <li>Unsplash User Likes: likes:atulvi</li>
-                                </ul>
-                              </Tooltip>
-                            }
-                          >
-                            <Form.Label>Unsplash Tags</Form.Label>
-                          </OverlayTrigger>
-                          <Form.Control
-                            placeholder="Nature, art, wallpaper"
-                            defaultValue={image_tags}
-                            as="input"
-                            rows="3"
+                        <Form.Group>
+                          <Form.Label>Background Collection</Form.Label>
+
+                          <UnsplashSelect
+                            value={image_tags}
+                            onChange={value => {
+                              localStorage.setItem("image_tags", value);
+                              this.setState({ image_tags: value });
+                              this.refetchAndSetImage();
+                            }}
                           />
                         </Form.Group>
                       </div>
@@ -401,10 +542,31 @@ export class Ikigai extends Component {
                     <Form.Control defaultValue={font} as="select">
                       <option value="Circular">Circular</option>
                       <option value="Futura">Futura</option>
-                      <option value="SharpGrotesk">SharpGrotesk</option>
-                      <option value="Milea">Milea</option>
+                      <option value="Product">Product</option>
+                      <option value="SharpGrotesk">Sharp Grotesk</option>
+                      <option value="BebasNeue">Bebas Neue</option>
                     </Form.Control>
                   </Form.Group>
+                  {this.state.background_mode === "image" && (
+                    <Form.Group
+                      onChange={e => {
+                        localStorage.setItem(
+                          "background_cycle",
+                          e.target.value
+                        );
+                        this.setState({ background_cycle: e.target.value });
+                      }}
+                    >
+                      <Form.Label>Cycle Background</Form.Label>
+                      <Form.Control defaultValue={background_cycle} as="select">
+                        <option value="never">Never</option>
+                        <option value="tab">Every New Tab</option>
+                        <option value="900">Every 15 Minutes</option>
+                        <option value="3600">Every Hour</option>
+                        <option value="86400">Every Day</option>
+                      </Form.Control>
+                    </Form.Group>
+                  )}
                   <div className="modal-button-row">
                     <Tooltipify message="Texture">
                       <div className="toggle-button" onClick={this.toggleDots}>
@@ -412,34 +574,38 @@ export class Ikigai extends Component {
                       </div>
                     </Tooltipify>
 
-                    {background_mode == "image" && (
+                    {background_mode === "image" && (
                       <Tooltipify message="Invert">
                         <div
                           className="toggle-button"
                           onClick={this.invertColors}
                         >
-                          &#xe891;
+                          &#xe3ab;
                         </div>
                       </Tooltipify>
                     )}
 
-                    {background_mode == "image" && (
+                    {background_mode === "image" && (
                       <Tooltipify message="Change Background">
                         <div
-                          className="toggle-button"
+                          className={`toggle-button ${`settings-button ${!this
+                            .state.refresh_enabled && "not-allowed"}`}`}
                           onClick={this.refetchAndSetImage}
                         >
-                          &#xe332;
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: this.state.refresh_enabled
+                                ? "&#xe332;"
+                                : "&#xe88b;"
+                            }}
+                          />
                         </div>
                       </Tooltipify>
                     )}
 
-                    {background_mode == "image" && (
+                    {background_mode === "image" && (
                       <Tooltipify message="Open Image">
-                        <div
-                          className="toggle-button"
-                          onClick={this.openImage}
-                        >
+                        <div className="toggle-button" onClick={this.openImage}>
                           &#xe89e;
                         </div>
                       </Tooltipify>
@@ -457,12 +623,14 @@ export class Ikigai extends Component {
                     <Form.Label>Widget</Form.Label>
                     <Form.Control defaultValue={widget} as="select">
                       {Object.keys(widgets).map(wid => (
-                        <option value={wid}>{wid}</option>
+                        <option key={wid} value={wid}>
+                          {wid}
+                        </option>
                       ))}
                     </Form.Control>
                   </Form.Group>
-    
-                  {widget == "message" && (
+
+                  {widget === "message" && (
                     <div>
                       <Row className="show-grid">
                         <Col md={12}>
@@ -508,7 +676,63 @@ export class Ikigai extends Component {
                       </Row>
                     </div>
                   )}
-                  {widget == "clock" && (
+
+                  {widget === "weather" && (
+                    <div>
+                      <Row className="show-grid">
+                        <Col md={12}>
+                          <Form.Group
+                            onChange={e => {
+                              localStorage.setItem(
+                                "clock_border",
+                                e.target.value
+                              );
+                              this.setState({ clock_border: e.target.value });
+                            }}
+                          >
+                            <Form.Label>Location</Form.Label>
+                            <PlacesSelect
+                              location={location}
+                              onChange={location => {
+                                localStorage.setItem(
+                                  "location",
+                                  JSON.stringify(location)
+                                );
+                                this.setState({
+                                  location: JSON.stringify(location)
+                                });
+                              }}
+                            />
+                          </Form.Group>
+                        </Col>
+
+                        <Col md={12}>
+                          <Form.Group
+                            onChange={e => {
+                              localStorage.setItem(
+                                "temprature_unit",
+                                e.target.value
+                              );
+                              this.setState({
+                                temprature_unit: e.target.value
+                              });
+                            }}
+                          >
+                            <Form.Label>Temprature Unit</Form.Label>
+                            <Form.Control
+                              defaultValue={temprature_unit}
+                              as="select"
+                            >
+                              <option value="C">Celcius</option>
+                              <option value="F">Farenheit</option>
+                            </Form.Control>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+
+                  {widget === "clock" && (
                     <div>
                       <Row className="show-grid">
                         <Col md={12}>
@@ -581,6 +805,42 @@ export class Ikigai extends Component {
                       </Row>
                     </div>
                   )}
+                </Tab>
+                <Tab eventKey="about" title="About">
+                  <center>
+                    <br />
+                    <img src="./icon128.png"></img>
+                    <br />
+                    Minim v2.1.0
+                    <br /> <br />
+                    <small>
+                     <b>
+                     Designed by  <a href="https://twitter.com/atulvinayak">
+                        @atulvinayak
+                      </a>
+                     </b>
+                     <br />
+                      <br />
+                      Weather Data by <a href="https://darksky.net">
+                        Dark Sky
+                      </a>{" "}
+                      <br />
+                      Backgrounds from{" "}
+                      <a href="https://unsplash.com">Unslpash</a>
+                      <br />
+                      <br />
+                      <br />
+                      <a href="https://ko-fi.com/S6S51GBT3" target="_blank">
+                        <img
+                          height="36"
+                          style={{ border: "0px", height: "36px" }}
+                          src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=2"
+                          border="0"
+                          alt="Buy Me a Coffee at ko-fi.com"
+                        />
+                      </a>
+                    </small>
+                  </center>
                 </Tab>
               </Tabs>
             </Container>

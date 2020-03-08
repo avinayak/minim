@@ -13,14 +13,16 @@
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.3.0",
+    "react-select": "^3.0.8",
+    "react-transition-group": "1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "extension": "mkdir chrome_extension && cp -r build/* chrome_extension/ &&cp chrome_manifest.json chrome_extension/manifest.json &&cp icon128.png chrome_extension/",
+    "extension": "mkdir chrome_extension && cp -r build/* chrome_extension/ &&cp chrome_manifest.json chrome_extension/manifest.json &&cp icon128.png chrome_extension/ && mkdir chrome_extension/minim && move chrome_extension/static chrome_extension/minim/static",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {

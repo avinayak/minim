@@ -4,6 +4,8 @@ const seperators = {
   space: " ",
   none: ""
 };
+
+let timer = null;
 export class ClockWidget extends Component {
   constructor() {
     super();
@@ -13,8 +15,12 @@ export class ClockWidget extends Component {
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(timer);
+  }
+
   componentDidMount() {
-    setInterval(() => {
+    timer = setInterval(() => {
       this.setState({
         ap: this.getAP(),
         timeString: this.getTime(
@@ -36,7 +42,7 @@ export class ClockWidget extends Component {
     var hours = date.getHours();
     var minutes = date.getMinutes();
 
-    if (clock_format != "24H") {
+    if (clock_format !== "24H") {
       hours = hours % 12;
       hours = hours ? hours : 12; // the hour '0' should be '12'
     }
@@ -58,17 +64,17 @@ export class ClockWidget extends Component {
           fontFamily: this.props.font,
           padding: "1px 45px",
           border: `${
-            this.props.clock_border == "rounded"
+            this.props.clock_border==="rounded"
               ? "solid"
               : this.props.clock_border
           } 10px`,
-          borderRadius: this.props.clock_border == "rounded" ? 30 : 0
+          borderRadius: this.props.clock_border==="rounded" ? 30 : 0
         }}
       >
         <span>
           {this.state.timeString}
           <span>
-            {this.props.clock_format == "12HAP" && (
+            {this.props.clock_format==="12HAP" && (
               <sup className="ampm">{this.state.ap}</sup>
             )}
           </span>
