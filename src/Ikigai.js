@@ -8,7 +8,7 @@ import {
   Tabs,
   Tab,
   OverlayTrigger,
-  Tooltip
+  Tooltip,
 } from "react-bootstrap";
 import ClockWidget from "./ClockWidget";
 import CustomMessageWidget from "./CustomMessageWidget";
@@ -51,6 +51,7 @@ export class Ikigai extends Component {
       font: localStorage.getItem("font"),
       widget: localStorage.getItem("widget"),
       clock_border: localStorage.getItem("clock_border"),
+      weather_format: localStorage.getItem("weather_format"),
       clock_seperator: localStorage.getItem("clock_seperator"),
       clock_format: localStorage.getItem("clock_format"),
       background_cycle: localStorage.getItem("background_cycle"),
@@ -60,28 +61,11 @@ export class Ikigai extends Component {
       image_foreground: localStorage.getItem("image_foreground"),
       image_tags: localStorage.getItem("image_tags"),
       color_index: localStorage.getItem("color_index"),
-      location: localStorage.getItem("location")
+      location: localStorage.getItem("location"),
     };
 
-    if (!localStorage.getItem("collections")) {
-      localStorage.setItem(
-        "collections",
-        JSON.stringify([
-          { value: "collection:1459961", label: "Unsplash Daily" },
-          { value: "collection:1065976", label: "Wallpapers" },
-          { value: "collection:3330445", label: "Textures & Patterns" },
-          { value: "collection:9510092", label: "Abstract" },
-          { value: "collection:17098", label: "Floral Beauty" },
-          { value: "collection:9270463", label: "Lush Life" }
-        ])
-      );
-    }
-
-    if (!localStorage.getItem("collections")) {
-      localStorage.setItem(
-        "collections",
-        JSON.stringify([{ value: "collection:1459961", label: "Ginza,Tokyo" }])
-      );
+    if (!localStorage.getItem("collections2")) {
+      localStorage.setItem("collections2", JSON.stringify([]));
     }
   }
 
@@ -104,13 +88,14 @@ export class Ikigai extends Component {
       color_index: 0,
       background_mode: "flat",
       dots: "0",
-      image_tags: "collection:1459961",
+      image_tags: "collection:3330448",
       image_foreground: "#ffffff",
       clock_seperator: "colon",
       clock_format: "12H",
       image_index: "0",
       temprature_unit: "C",
       clock_border: "none",
+      weather_format: "ts",
       message_size: "50",
       message: "Hello!",
       widget: "clock",
@@ -118,23 +103,23 @@ export class Ikigai extends Component {
       background_cycle: "never",
       location: JSON.stringify({
         value: "139.7594549,35.6828387",
-        label: "Tokyo, Japan"
-      })
+        label: "Tokyo, Japan",
+      }),
     };
-    Object.keys(default_values).forEach(key => {
+    Object.keys(default_values).forEach((key) => {
       if (!localStorage.getItem(key)) {
         localStorage.setItem(key, default_values[key]);
         this.setState({ [key]: default_values[key] });
       }
     });
     if (!localStorage.getItem("image")) {
-      this.toDataUrl(UNSPLASH_URL, b64img => {
+      this.toDataUrl(UNSPLASH_URL, (b64img) => {
         this.setState({ image: b64img });
         localStorage.setItem("image", b64img);
       });
     }
     if (!localStorage.getItem("image2")) {
-      this.toDataUrl(UNSPLASH_URL, b64img => {
+      this.toDataUrl(UNSPLASH_URL, (b64img) => {
         this.setState({ image2: b64img });
         localStorage.setItem("image2", b64img);
       });
@@ -192,12 +177,12 @@ export class Ikigai extends Component {
     console.log(window.screen);
     this.setState({
       tint: this.state.tint_value,
-      filter: "saturate(100%)"
+      filter: "saturate(100%)",
     });
     this.logNextBackgroundChange();
   }
 
-  keyHandle = event => {
+  keyHandle = (event) => {
     if (event.keyCode === 83 && !this.state.modalVisible) {
       this.invertColors();
     }
@@ -251,7 +236,7 @@ export class Ikigai extends Component {
   };
 
   refetchAndSetImageHidden = () => {
-    this.toDataUrl(this.unsplash_url_fix(), b64img => {
+    this.toDataUrl(this.unsplash_url_fix(), (b64img) => {
       if (this.state.image_index === "1") {
         localStorage.setItem("image", b64img);
         this.setState({ image: b64img });
@@ -285,7 +270,7 @@ export class Ikigai extends Component {
       setTimeout(() => {
         this.setState({ refresh_enabled: true });
       }, 2700);
-      this.toDataUrl(this.unsplash_url_fix(), b64img => {
+      this.toDataUrl(this.unsplash_url_fix(), (b64img) => {
         let time_now = Math.round(new Date().getTime() / 1000);
         localStorage.setItem("background_last_updated", time_now);
 
@@ -304,6 +289,9 @@ export class Ikigai extends Component {
 
   openImage = () => {
     let imurl = localStorage.getItem("unsplash_image_download");
+    if (this.state.image_index === "0") {
+      imurl = localStorage.getItem("unsplash_image_download2");
+    }
     var win = window.open(imurl, "_blank");
     win.focus();
   };
@@ -314,7 +302,19 @@ export class Ikigai extends Component {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.onload = () => {
-      localStorage.setItem("unsplash_image_download", xhr.responseURL);
+
+      if (this.state.image_index === "0") {
+        localStorage.setItem("unsplash_image_download", xhr.responseURL);
+      } else {
+        localStorage.setItem("unsplash_image_download2", xhr.responseURL);
+      }
+
+
+      console.log(this.state.image_index)
+      console.log(localStorage.getItem("unsplash_image_download2"))
+      console.log(localStorage.getItem("unsplash_image_download"))
+     
+
       var reader = new FileReader();
       reader.onloadend = () => {
         callback(reader.result);
@@ -330,7 +330,7 @@ export class Ikigai extends Component {
     let widgets = {
       clock: ClockWidget,
       message: CustomMessageWidget,
-      weather: WeatherWidget
+      weather: WeatherWidget,
     };
 
     let {
@@ -347,6 +347,7 @@ export class Ikigai extends Component {
       location,
       widget,
       clock_border,
+      weather_format,
       clock_seperator,
       clock_format,
       temprature_unit,
@@ -354,7 +355,7 @@ export class Ikigai extends Component {
       message,
       image_foreground,
       image_tags,
-      color_index
+      color_index,
     } = this.state;
 
     if (image_index === "1") image = image2;
@@ -363,11 +364,11 @@ export class Ikigai extends Component {
       background_mode !== "image"
         ? {
             background:
-              colors[this.state.background_mode][color_index].background
+              colors[this.state.background_mode][color_index].background,
           }
         : {
             background: `url(${image}) no-repeat center center`,
-            filter
+            filter,
           };
 
     let foreground =
@@ -382,6 +383,7 @@ export class Ikigai extends Component {
             foreground={foreground}
             font={font}
             clock_border={clock_border}
+            weather_format={weather_format}
             clock_seperator={clock_seperator}
             clock_format={clock_format}
             temprature_unit={temprature_unit}
@@ -403,17 +405,18 @@ export class Ikigai extends Component {
               <Tooltipify message="Change Background">
                 <div
                   style={{
-                    color: foreground
+                    color: foreground,
                   }}
-                  className={`settings-button ${!this.state.refresh_enabled &&
-                    "not-allowed"}`}
+                  className={`settings-button ${
+                    !this.state.refresh_enabled && "not-allowed"
+                  }`}
                   onClick={this.refetchAndSetImage}
                 >
                   <span
                     dangerouslySetInnerHTML={{
                       __html: this.state.refresh_enabled
                         ? "&#xe332;"
-                        : "&#xe88b;"
+                        : "&#xe88b;",
                     }}
                   />
                 </div>
@@ -423,7 +426,7 @@ export class Ikigai extends Component {
           <Tooltipify message="Settings">
             <div
               style={{
-                color: foreground
+                color: foreground,
               }}
               className="settings-button"
               onClick={this.handleOpen}
@@ -437,7 +440,7 @@ export class Ikigai extends Component {
           className="tint-layer"
           style={{
             opacity: this.state.tint,
-            background: image_foreground === "#ffffff" ? "#111111" : "#ffffff"
+            background: image_foreground === "#ffffff" ? "#111111" : "#ffffff",
           }}
         />
 
@@ -458,7 +461,7 @@ export class Ikigai extends Component {
                 <Tab eventKey="background" title="Background">
                   <br />
                   <Form.Group
-                    onChange={e => {
+                    onChange={(e) => {
                       localStorage.setItem("background_mode", e.target.value);
                       localStorage.setItem("color_index", 0);
 
@@ -469,7 +472,7 @@ export class Ikigai extends Component {
                         background_mode: e.target.value,
                         tint_value: tintv,
                         tint: tintv,
-                        color_index: 0
+                        color_index: 0,
                       });
                     }}
                   >
@@ -483,10 +486,10 @@ export class Ikigai extends Component {
                   {(this.state.background_mode === "flat" ||
                     this.state.background_mode === "gradient") && (
                     <Form.Group
-                      onChange={e => {
+                      onChange={(e) => {
                         localStorage.setItem("color_index", e.target.value);
                         this.setState({
-                          color_index: parseInt(e.target.value)
+                          color_index: parseInt(e.target.value),
                         });
                       }}
                     >
@@ -509,7 +512,7 @@ export class Ikigai extends Component {
 
                           <UnsplashSelect
                             value={image_tags}
-                            onChange={value => {
+                            onChange={(value) => {
                               localStorage.setItem("image_tags", value);
                               this.setState({ image_tags: value });
                               this.refetchAndSetImage();
@@ -523,17 +526,17 @@ export class Ikigai extends Component {
                   <Slider
                     value={this.state.tint * 100}
                     step={1}
-                    onChange={tint_value => {
+                    onChange={(tint_value) => {
                       localStorage.setItem("tint_value", tint_value / 100.0);
                       this.setState({
                         tint: tint_value / 100.0,
-                        tint_value: tint_value / 100.0
+                        tint_value: tint_value / 100.0,
                       });
                     }}
                   />
                   <br />
                   <Form.Group
-                    onChange={e => {
+                    onChange={(e) => {
                       localStorage.setItem("font", e.target.value);
                       this.setState({ font: e.target.value });
                     }}
@@ -549,7 +552,7 @@ export class Ikigai extends Component {
                   </Form.Group>
                   {this.state.background_mode === "image" && (
                     <Form.Group
-                      onChange={e => {
+                      onChange={(e) => {
                         localStorage.setItem(
                           "background_cycle",
                           e.target.value
@@ -588,15 +591,16 @@ export class Ikigai extends Component {
                     {background_mode === "image" && (
                       <Tooltipify message="Change Background">
                         <div
-                          className={`toggle-button ${`settings-button ${!this
-                            .state.refresh_enabled && "not-allowed"}`}`}
+                          className={`toggle-button ${`settings-button ${
+                            !this.state.refresh_enabled && "not-allowed"
+                          }`}`}
                           onClick={this.refetchAndSetImage}
                         >
                           <span
                             dangerouslySetInnerHTML={{
                               __html: this.state.refresh_enabled
                                 ? "&#xe332;"
-                                : "&#xe88b;"
+                                : "&#xe88b;",
                             }}
                           />
                         </div>
@@ -615,14 +619,14 @@ export class Ikigai extends Component {
                 <Tab eventKey="widget" title="Widget">
                   <br />
                   <Form.Group
-                    onChange={e => {
+                    onChange={(e) => {
                       localStorage.setItem("widget", e.target.value);
                       this.setState({ widget: e.target.value });
                     }}
                   >
                     <Form.Label>Widget</Form.Label>
                     <Form.Control defaultValue={widget} as="select">
-                      {Object.keys(widgets).map(wid => (
+                      {Object.keys(widgets).map((wid) => (
                         <option key={wid} value={wid}>
                           {wid}
                         </option>
@@ -635,7 +639,7 @@ export class Ikigai extends Component {
                       <Row className="show-grid">
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
                               localStorage.setItem("message", e.target.value);
                               this.setState({ message: e.target.value });
                             }}
@@ -652,7 +656,7 @@ export class Ikigai extends Component {
 
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
                               localStorage.setItem(
                                 "message_size",
                                 e.target.value
@@ -666,8 +670,8 @@ export class Ikigai extends Component {
                               as="select"
                             >
                               {[...Array(20).keys()]
-                                .filter(siz => siz > 1)
-                                .map(siz => (
+                                .filter((siz) => siz > 1)
+                                .map((siz) => (
                                   <option value={siz * 10}>{siz * 10}</option>
                                 ))}
                             </Form.Control>
@@ -682,7 +686,7 @@ export class Ikigai extends Component {
                       <Row className="show-grid">
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
                               localStorage.setItem(
                                 "clock_border",
                                 e.target.value
@@ -693,13 +697,13 @@ export class Ikigai extends Component {
                             <Form.Label>Location</Form.Label>
                             <PlacesSelect
                               location={location}
-                              onChange={location => {
+                              onChange={(location) => {
                                 localStorage.setItem(
                                   "location",
                                   JSON.stringify(location)
                                 );
                                 this.setState({
-                                  location: JSON.stringify(location)
+                                  location: JSON.stringify(location),
                                 });
                               }}
                             />
@@ -708,13 +712,36 @@ export class Ikigai extends Component {
 
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
+                              localStorage.setItem(
+                                "weather_format",
+                                e.target.value
+                              );
+                              this.setState({
+                                weather_format: e.target.value,
+                              });
+                            }}
+                          >
+                            <Form.Label>Weather Format</Form.Label>
+                            <Form.Control
+                              defaultValue={weather_format}
+                              as="select"
+                            >
+                              <option value="t">Temprature</option>
+                              <option value="ts">Temprature and Summary</option>
+                            </Form.Control>
+                          </Form.Group>
+                        </Col>
+
+                        <Col md={12}>
+                          <Form.Group
+                            onChange={(e) => {
                               localStorage.setItem(
                                 "temprature_unit",
                                 e.target.value
                               );
                               this.setState({
-                                temprature_unit: e.target.value
+                                temprature_unit: e.target.value,
                               });
                             }}
                           >
@@ -737,7 +764,7 @@ export class Ikigai extends Component {
                       <Row className="show-grid">
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
                               localStorage.setItem(
                                 "clock_border",
                                 e.target.value
@@ -759,13 +786,13 @@ export class Ikigai extends Component {
 
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
                               localStorage.setItem(
                                 "clock_seperator",
                                 e.target.value
                               );
                               this.setState({
-                                clock_seperator: e.target.value
+                                clock_seperator: e.target.value,
                               });
                             }}
                           >
@@ -783,7 +810,7 @@ export class Ikigai extends Component {
 
                         <Col md={12}>
                           <Form.Group
-                            onChange={e => {
+                            onChange={(e) => {
                               localStorage.setItem(
                                 "clock_format",
                                 e.target.value
@@ -814,12 +841,13 @@ export class Ikigai extends Component {
                     Minim v2.1.0
                     <br /> <br />
                     <small>
-                     <b>
-                     Designed by  <a href="https://twitter.com/atulvinayak">
-                        @atulvinayak
-                      </a>
-                     </b>
-                     <br />
+                      <b>
+                        Designed by{" "}
+                        <a href="https://twitter.com/atulvinayak">
+                          @atulvinayak
+                        </a>
+                      </b>
+                      <br />
                       <br />
                       Weather Data by <a href="https://darksky.net">
                         Dark Sky

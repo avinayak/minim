@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Minim",
-  "description": "A minimal newtab for chrome",
-  "version": "2.1.0",
+  "name": "Minim - New Tab for minimalists",
+  "description": "A minimal New Tab for Chrome",
+  "version": "2.1.1",
   "content_security_policy": "script-src 'self' 'sha256-PF1jTdVfD3BWwEVB+lcqfjQAhCJAQuaG/6YC9I+NS+U=';object-src 'self' 'sha256-PF1jTdVfD3BWwEVB+lcqfjQAhCJAQuaG/6YC9I+NS+U=';",
   "chrome_url_overrides": {
     "newtab": "index.html"

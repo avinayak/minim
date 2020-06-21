@@ -7,9 +7,13 @@ export class WeatherWidget extends Component {
     if (!localStorage.getItem("temprature")) {
       localStorage.setItem("temprature", "_");
     }
+    if (!localStorage.getItem("summary")) {
+      localStorage.setItem("summary", "_");
+    }
 
     this.state = {
-      temprature: localStorage.getItem("temprature")
+      temprature: localStorage.getItem("temprature"),
+      summary: localStorage.getItem("summary")
     };
   }
 
@@ -27,11 +31,12 @@ export class WeatherWidget extends Component {
       if (weather_last_updated + weather_update_freq <= time_now) {
         this.getNewTemprature(
           JSON.parse(this.props.location).value,
-          temprature => {
+          (temprature, summary) => {
             localStorage.setItem("temprature", temprature);
+            localStorage.setItem("summary", summary);
             let time_now = Math.round(new Date().getTime() / 1000);
             localStorage.setItem("weather_last_updated", time_now);
-            this.setState({ temprature });
+            this.setState({ temprature, summary });
           }
         );
       }
@@ -48,7 +53,10 @@ export class WeatherWidget extends Component {
       .then(data => {
         // Work with JSON data here
         console.log(data);
-        callback(parseFloat(data.currently.temperature));
+        callback(
+          parseFloat(data.currently.temperature),
+          data.currently.summary
+        );
       })
       .catch(err => {
         // Do something for an error here
@@ -57,24 +65,35 @@ export class WeatherWidget extends Component {
   };
 
   render() {
-    var temprature = this.state.temprature;
+    var { temprature, summary } = this.state;
 
     if (this.props.temprature_unit === "C")
       temprature = Math.round(((parseFloat(temprature) - 32) * 5) / 9);
     else temprature = Math.round(temprature);
-    if(isNaN(temprature))
-      temprature = "_"
+    if (isNaN(temprature)) temprature = "_";
+    let weather = (
+      <span>
+        {temprature}&deg; {summary}
+      </span>
+    );
+    
+    let fontSize = Math.max( (123.33 - 3.333*summary.length),40);
+    if (this.props.weather_format === "t") {
+      fontSize = 120;
+      weather = <span>{temprature}&deg;</span>;
+    }
+
     return (
       <div
         style={{
           textAlign: "center",
           color: this.props.foreground,
-          fontSize: 120,
+          fontSize,
           fontFamily: this.props.font,
           padding: "1px 45px"
         }}
       >
-        <span>{temprature}&deg;</span>
+        {weather}
       </div>
     );
   }
