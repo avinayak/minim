@@ -302,18 +302,15 @@ export class Ikigai extends Component {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.onload = () => {
-
       if (this.state.image_index === "0") {
         localStorage.setItem("unsplash_image_download", xhr.responseURL);
       } else {
         localStorage.setItem("unsplash_image_download2", xhr.responseURL);
       }
 
-
-      console.log(this.state.image_index)
-      console.log(localStorage.getItem("unsplash_image_download2"))
-      console.log(localStorage.getItem("unsplash_image_download"))
-     
+      console.log(this.state.image_index);
+      console.log(localStorage.getItem("unsplash_image_download2"));
+      console.log(localStorage.getItem("unsplash_image_download"));
 
       var reader = new FileReader();
       reader.onloadend = () => {
@@ -836,9 +833,12 @@ export class Ikigai extends Component {
                 <Tab eventKey="about" title="About">
                   <center>
                     <br />
-                    <img src="./icon128.png"></img>
+                    <img
+                      alt="Three pebbles stacked on top of each other that resembles a zen tower, usually seen in places of extreme calmness. Why you reading this? This is not the place to look for easter eggs."
+                      src="./icon128.png"
+                    ></img>
                     <br />
-                    Minim v2.1.0
+                    Minim v2.1.1
                     <br /> <br />
                     <small>
                       <b>
