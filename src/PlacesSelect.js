@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AsyncSelect from "react-select/async";
 
 const photonToSelect = data => {
+  console.log(data)
   return data.features.map(x => {
     var coord = x.geometry.coordinates;
     var value = `${coord[0]},${coord[1]}`;
@@ -20,7 +21,7 @@ const photonToSelect = data => {
 
 const loadOptions = (inputValue, callback) => {
   if (inputValue.length > 2) {
-    fetch("http://photon.komoot.de/api/?q=" + inputValue + "&limit=5")
+    fetch('https://ft3l273ac8.execute-api.ap-northeast-1.amazonaws.com/default/minimLocation?q='+inputValue)
       .then(response => {
         return response.json();
       })

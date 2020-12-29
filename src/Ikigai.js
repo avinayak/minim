@@ -18,6 +18,7 @@ import "rc-slider/assets/index.css";
 import UnsplashSelect from "./UnsplashSelect";
 import WeatherWidget from "./WeatherWidget";
 import PlacesSelect from "./PlacesSelect";
+import BookmarksBar from "./BookmarksBar"
 
 const Tooltipify = ({ message, children }) => {
   return (
@@ -288,30 +289,21 @@ export class Ikigai extends Component {
   };
 
   openImage = () => {
-    let imurl = localStorage.getItem("unsplash_image_download");
-    if (this.state.image_index === "0") {
-      imurl = localStorage.getItem("unsplash_image_download2");
-    }
+    let im_index = localStorage.getItem('image_index', '0')
+    let imurl = localStorage.getItem("unsplash_image_download"+im_index);
+    console.log(imurl)
     var win = window.open(imurl, "_blank");
     win.focus();
   };
 
   toDataUrl = (url, callback) => {
     console.log(url);
+    let im_index = localStorage.getItem('image_index', '0')
     this.setState({ filter: "saturate(0%)", loadingImage: true });
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.onload = () => {
-      if (this.state.image_index === "0") {
-        localStorage.setItem("unsplash_image_download", xhr.responseURL);
-      } else {
-        localStorage.setItem("unsplash_image_download2", xhr.responseURL);
-      }
-
-      console.log(this.state.image_index);
-      console.log(localStorage.getItem("unsplash_image_download2"));
-      console.log(localStorage.getItem("unsplash_image_download"));
-
+      localStorage.setItem("unsplash_image_download"+im_index, xhr.responseURL);
       var reader = new FileReader();
       reader.onloadend = () => {
         callback(reader.result);
@@ -389,6 +381,7 @@ export class Ikigai extends Component {
             location={location}
           />
         </div>
+        {/* <BookmarksBar/> */}
         <div>
           {loadingImage && (
             <div className="spinner-wrap">
@@ -830,7 +823,8 @@ export class Ikigai extends Component {
                     </div>
                   )}
                 </Tab>
-                <Tab eventKey="about" title="About">
+
+                {/* <Tab eventKey="bookmarks" title="Bookmarks">
                   <center>
                     <br />
                     <img
@@ -848,6 +842,43 @@ export class Ikigai extends Component {
                         </a>
                       </b>
                       <br />
+                      <br />
+                      Weather Data by <a href="https://darksky.net">
+                        Dark Sky
+                      </a>{" "}
+                      <br />
+                      Backgrounds from{" "}
+                      <a href="https://unsplash.com">Unslpash</a>
+                      <br />
+                      <br />
+                      <br />
+                      <a href="https://ko-fi.com/S6S51GBT3" target="_blank">
+                        <img
+                          height="36"
+                          style={{ border: "0px", height: "36px" }}
+                          src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=2"
+                          border="0"
+                          alt="Buy Me a Coffee at ko-fi.com"
+                        />
+                      </a>
+                    </small>
+                  </center>
+                </Tab> */}
+
+                <Tab eventKey="about" title="About">
+                  <center>
+                    <br />
+                    <img src="./icon128.png"></img>
+                    <br />
+                    Minim v2.1.3
+                    <br /> <br />
+                    <small>
+                     <b>
+                     Designed by  <a href="https://twitter.com/atulvinayak">
+                        @atulvinayak
+                      </a>
+                     </b>
+                     <br />
                       <br />
                       Weather Data by <a href="https://darksky.net">
                         Dark Sky

@@ -22,7 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "extension": "mkdir chrome_extension && cp -r build/* chrome_extension/ &&cp chrome_manifest.json chrome_extension/manifest.json &&cp icon128.png chrome_extension/ && mkdir chrome_extension/minim && move chrome_extension/static chrome_extension/minim/static",
+    "ext_win": "mkdir chrome_extension && cp -r build/* chrome_extension/ &&cp chrome_manifest.json chrome_extension/manifest.json &&cp icon128.png chrome_extension/ && mkdir chrome_extension/minim && move chrome_extension/static chrome_extension/minim/static",
+    "ext": "bash make_extension.sh",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
