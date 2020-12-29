@@ -870,7 +870,7 @@ export class Ikigai extends Component {
                     <br />
                     <img src="./icon128.png"></img>
                     <br />
-                    Minim v2.1.3
+                    Minim v2.1.4
                     <br /> <br />
                     <small>
                      <b>
