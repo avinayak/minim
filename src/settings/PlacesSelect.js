@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import AsyncSelect from "react-select/async";
+import { customStyles } from "./SelectStyle";
+
 
 const photonToSelect = data => {
   console.log(data)
@@ -60,6 +62,7 @@ export default class PlacesSelect extends Component {
           defaultOptions
           value={JSON.parse(this.props.location)}
           onChange={this.handleInputChange}
+          styles={customStyles}
         />
       </div>
     );

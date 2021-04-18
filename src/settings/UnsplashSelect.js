@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import CreatableSelect from "react-select/creatable";
+import { customStyles } from "./SelectStyle";
 
 const presets = [
   { value: "likes:atulvi", label: "Curated by Minim" },
@@ -13,41 +14,6 @@ const presets = [
   { value: "collection:3348849", label: "Architecture" },
   { value: "collection:9670693", label: "Aurora" },
 ];
-
-const customStyles = {
-  option: (provided, state) => ({
-    ...provided,
-    padding: "0px 24px",
-  }),
-  control: (provided, state) => ({
-    ...provided,
-    background: "#f7f7f9",
-    borderRadius: 0,
-    border: "none",
-    padding: "4px 0px 4px 17px",
-  }),
-  menu: (provided) => ({
-    ...provided,
-    border: "1px solid",
-    borderRadius: 0
-  }),
-  dropdownIndicator: (provided, state) => ({
-    ...provided,
-    color: "#55595c",
-    width: "31px",
-    marginRight: "-6px",
-  }),
-
-  clearIndicator: (provided, state) => ({
-    ...provided,
-    display: "none",
-  }),
-
-  indicatorSeparator: (provided, state) => ({
-    ...provided,
-    display: "none",
-  })
-};
 
 export default class UnsplashSelect extends Component {
   constructor() {

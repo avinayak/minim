@@ -146,7 +146,6 @@ body {
   padding-left: 14px;
 }
 .modal-content {
-  height: 101%;
   position: fixed !important;
   right: -2px;
   width: 363px !important;
@@ -282,11 +281,10 @@ body {
   pointer-events: auto;
   background-color: #fff;
   background-clip: padding-box;
-  border-radius: .6rem;
+  border-radius: 0.6rem;
   outline: 0;
   border: none !important;
-  margin: 10px;
-  height: 98%;
+  margin: 32px;
   box-shadow: rgb(0 0 0 / 30%) -9px 12px 20px 1px;
 }
 
@@ -301,11 +299,9 @@ body {
 }
 
 .modal-button-row {
-  position: absolute;
-  bottom: 25px;
   text-align: center;
   width: 100%;
-  padding-right: 63px;
+  padding: 17px;
 }
 
 .not-allowed {
@@ -313,13 +309,21 @@ body {
 }
 
 .rc-slider-track {
-  background:#212529 !important;
+  background: #212529 !important;
 }
 
 .rc-slider-handle {
   border: solid 2px #212529 !important;
+  border-radius: 0% !important;
+  background-color: #212529 !important;
+  width: 5px !important;
 }
 
 .modal-title {
   padding-left: 17px;
+}
+
+.modal-header > button {
+  padding-right: 30px;
+  padding-top: 22px;
 }
