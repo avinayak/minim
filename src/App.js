@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "./bootstrap.min.css";
 import Ikigai from "./Ikigai";
 
 class App extends Component {

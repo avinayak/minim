@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import CreatableSelect from "react-select/creatable";
 
 const presets = [
+  { value: "likes:atulvi", label: "Curated by Minim" },
   { value: "collection:3330448", label: "Nature" },
   { value: "collection:1065976", label: "Wallpapers" },
   { value: "collection:3330445", label: "Textures & Patterns" },
@@ -10,14 +11,49 @@ const presets = [
   { value: "collection:17098", label: "Floral Beauty" },
   { value: "collection:9270463", label: "Lush Life" },
   { value: "collection:3348849", label: "Architecture" },
-  { value: "collection:9670693", label: "Aurora" }
+  { value: "collection:9670693", label: "Aurora" },
 ];
+
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    padding: "0px 24px",
+  }),
+  control: (provided, state) => ({
+    ...provided,
+    background: "#f7f7f9",
+    borderRadius: 0,
+    border: "none",
+    padding: "4px 0px 4px 17px",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    border: "1px solid",
+    borderRadius: 0
+  }),
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    color: "#55595c",
+    width: "31px",
+    marginRight: "-6px",
+  }),
+
+  clearIndicator: (provided, state) => ({
+    ...provided,
+    display: "none",
+  }),
+
+  indicatorSeparator: (provided, state) => ({
+    ...provided,
+    display: "none",
+  })
+};
 
 export default class UnsplashSelect extends Component {
   constructor() {
     super();
     this.state = {
-      collections2: JSON.parse(localStorage.getItem("collections2"))
+      collections2: JSON.parse(localStorage.getItem("collections2")),
     };
   }
   handleChange = (newValue, actionMeta) => {
@@ -25,14 +61,14 @@ export default class UnsplashSelect extends Component {
       this.props.onChange(newValue.value);
     } else if (actionMeta.action === "clear") {
       var deleted = this.state.collections2.filter(
-        x => x.value === this.props.value
+        (x) => x.value === this.props.value
       )[0];
       if (deleted.isnew) {
         var nc = this.state.collections2.filter(
-          x => x.value !== this.props.value
+          (x) => x.value !== this.props.value
         );
         this.setState({
-          collections2: nc
+          collections2: nc,
         });
         localStorage.setItem("collections2", JSON.stringify(nc));
         this.props.onChange(presets[0].value);
@@ -52,11 +88,11 @@ export default class UnsplashSelect extends Component {
         {
           label,
           value,
-          isnew: true
-        }
+          isnew: true,
+        },
       ];
       this.setState({
-        collections2: newcoll
+        collections2: newcoll,
       });
       localStorage.setItem("collections2", JSON.stringify(newcoll));
       this.props.onChange(value);
@@ -66,15 +102,16 @@ export default class UnsplashSelect extends Component {
 
   render() {
     let { collections2 } = this.state;
-    collections2 = collections2.concat(presets)
+    collections2 = collections2.concat(presets);
     return (
       <CreatableSelect
         isClearable
         value={
-          collections2.filter(option => option.value === this.props.value)[0]
+          collections2.filter((option) => option.value === this.props.value)[0]
         }
         onChange={this.handleChange}
         options={collections2}
+        styles={customStyles}
       />
     );
   }

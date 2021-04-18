@@ -18,9 +18,9 @@ code {
   font-style: normal;
   font-weight: 400;
   src: local('Material Icons'),
-       local('MaterialIcons-Regular'),
+       local('./fonts/MaterialIcons-Regular'),
       
-       url(MaterialIcons-Regular.ttf) format('truetype');
+       url("fonts/MaterialIcons-Regular.ttf") format('truetype');
 }
 
 .material-icons {

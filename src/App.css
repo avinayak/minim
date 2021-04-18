@@ -18,35 +18,36 @@ body {
 .info {
   font-family: "Material Icons";
   font-size: 16px !important;
+  src: url("fonts/MaterialIcons-Regular.ttf");
 }
 
 @font-face {
   font-family: Circular;
-  src: url("CircularStd-Book.ttf");
+  src: url("fonts/CircularStd-Book.ttf");
 }
 @font-face {
   font-family: Futura;
-  src: url("Futura.ttf");
+  src: url("fonts/Futura.ttf");
 }
 
 @font-face {
   font-family: SharpGrotesk;
-  src: url("SharpGrotesk.ttf");
+  src: url("fonts/SharpGrotesk.ttf");
 }
 
 @font-face {
   font-family: Product;
-  src: url("Product.ttf");
+  src: url("fonts/Product.ttf");
 }
 
 @font-face {
   font-family: BebasNeue;
-  src: url("BebasNeue.ttf");
+  src: url("fonts/BebasNeue.ttf");
 }
 
 @font-face {
   font-family: Milea;
-  src: url("Milea.ttf");
+  src: url("fonts/Milea.ttf");
 }
 
 .buttons:hover {
@@ -274,10 +275,19 @@ body {
 }
 
 .modal-content {
-  box-shadow: -25px 0px 91px -13px rgba(0, 0, 0, 0.55);
-  opacity: 0.9;
-  backdrop-filter: blur(3px);
-  border: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: .6rem;
+  outline: 0;
+  border: none !important;
+  margin: 10px;
+  height: 98%;
+  box-shadow: rgb(0 0 0 / 30%) -9px 12px 20px 1px;
 }
 
 .toggle-button {
@@ -302,31 +312,14 @@ body {
   cursor: wait;
 }
 
-.bookmarks-bar {
-  padding: 2px 12px;
-  background: linear-gradient(180deg, #2d2d2d, transparent);
-  color: white;
-  height: 40px;
-  opacity: 0;
-  font-size: 12px;
-  transition: opacity 0.5s ease;
-  display: flex;
-  justify-content: left;
-  flex-direction: row;
+.rc-slider-track {
+  background:#212529 !important;
 }
 
-.bookmarks-bar:hover {
-  opacity: 1;
+.rc-slider-handle {
+  border: solid 2px #212529 !important;
 }
 
-.bookmark-button {
-  border-radius: 100px !important;
-  font-size: 12px !important;
-  height: 35px;
-  margin-right: 5px;
-}
-
-.bookmark-fav {
-  height: 18px;
-  margin-right: 6px;
+.modal-title {
+  padding-left: 17px;
 }
