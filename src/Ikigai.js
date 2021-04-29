@@ -10,14 +10,10 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import ClockWidget from "./ClockWidget";
-import CustomMessageWidget from "./CustomMessageWidget";
+import ClockWidget from "./widgets/ClockWidget";
+import CustomMessageWidget from "./widgets/CustomMessageWidget";
 import colors from "./settings/colors";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
-import UnsplashSelect from "./settings/UnsplashSelect";
-import WeatherWidget from "./WeatherWidget";
-import PlacesSelect from "./settings/PlacesSelect";
+import WeatherWidget from "./widgets/WeatherWidget";
 
 import Settings from "./settings/Settings";
 
@@ -421,7 +417,7 @@ export class Ikigai extends Component {
         <Modal
           size="lg"
           animation={false}
-          show={modalVisible}
+          show={true}
           onHide={this.handleClose}
         >
           <Modal.Header closeButton>

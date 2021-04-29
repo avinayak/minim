@@ -4,15 +4,16 @@ import CreatableSelect from "react-select/creatable";
 import { customStyles } from "./SelectStyle";
 
 const presets = [
-  { value: "likes:atulvi", label: "Curated by Minim" },
-  { value: "collection:3330448", label: "Nature" },
-  { value: "collection:1065976", label: "Wallpapers" },
-  { value: "collection:3330445", label: "Textures & Patterns" },
-  { value: "collection:9510092", label: "Experimental" },
-  { value: "collection:17098", label: "Floral Beauty" },
-  { value: "collection:9270463", label: "Lush Life" },
-  { value: "collection:3348849", label: "Architecture" },
-  { value: "collection:9670693", label: "Aurora" },
+  { value: "likes:atulvi", label: "Curated by Minim", isnew: false },
+  { value: "collection:3330448", label: "Nature", isnew: false },
+  { value: "collection:1065976", label: "Wallpapers", isnew: false },
+  { value: "collection:3330445", label: "Textures & Patterns", isnew: false },
+  { value: "collection:9510092", label: "Experimental", isnew: false },
+  { value: "collection:17098", label: "Floral Beauty", isnew: false },
+  { value: "collection:4694315", label: "Film", isnew: false },
+  { value: "collection:9270463", label: "Lush Life", isnew: false },
+  { value: "collection:3348849", label: "Architecture", isnew: false },
+  { value: "collection:9670693", label: "Aurora", isnew: false },
 ];
 
 export default class UnsplashSelect extends Component {
@@ -29,7 +30,7 @@ export default class UnsplashSelect extends Component {
       var deleted = this.state.collections2.filter(
         (x) => x.value === this.props.value
       )[0];
-      if (deleted.isnew) {
+      if (deleted && deleted.isnew) {
         var nc = this.state.collections2.filter(
           (x) => x.value !== this.props.value
         );

@@ -82,6 +82,22 @@ class BackgroundSettings extends Component {
             <option value="BebasNeue">Bebas Neue</option>
           </Form.Control>
         </Form.Group>
+
+        {/* <Form.Group
+          onChange={(e) => {
+            setStore("font", e.target.value);
+          }}
+        >
+          <Form.Label>Widget Position</Form.Label>
+          <Form.Control defaultValue={s.font} as="select">
+            <option value="Left Top">left_top</option>
+            <option value="Left Center">left_center</option>
+            <option value="Left Bottom">left_bottom</option>
+            <option value="Center">center_center</option>
+          </Form.Control>
+        </Form.Group> */}
+
+
         {s.background_mode === "image" && (
           <Form.Group
             onChange={(e) => {

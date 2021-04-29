@@ -8,7 +8,7 @@ class AboutPage extends Component {
           <br />
           <img src="./icon128.png"></img>
           <br />
-          Minim v2.1.4
+          Minim v2.2.0 - "Detach"
           <br /> <br />
           <small>
             <b>

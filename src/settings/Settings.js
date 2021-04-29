@@ -22,7 +22,7 @@ class Settings extends Component {
     return (
       <React.Fragment>
         <Tabs>
-          <Tab eventKey="background" title="Background">
+          <Tab eventKey="general" title="General">
             <BackgroundSettings
               setStore={setStore}
               s={s}
