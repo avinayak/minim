@@ -58,7 +58,6 @@ export class ClockWidget extends Component {
     return (
       <div
         style={{
-          textAlign: "center",
           color: this.props.foreground,
           fontSize: 120,
           fontFamily: this.props.font,

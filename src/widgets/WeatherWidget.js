@@ -86,7 +86,6 @@ export class WeatherWidget extends Component {
     return (
       <div
         style={{
-          textAlign: "center",
           color: this.props.foreground,
           fontSize,
           fontFamily: this.props.font,

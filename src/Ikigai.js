@@ -55,6 +55,8 @@ export class Ikigai extends Component {
       clock_format: localStorage.getItem("clock_format"),
       background_cycle: localStorage.getItem("background_cycle"),
       temprature_unit: localStorage.getItem("temprature_unit"),
+      widget_x: localStorage.getItem("widget_x"),
+      widget_y: localStorage.getItem("widget_y"),
       message_size: localStorage.getItem("message_size"),
       message: localStorage.getItem("message"),
       image_foreground: localStorage.getItem("image_foreground"),
@@ -86,7 +88,7 @@ export class Ikigai extends Component {
       color_index: 0,
       background_mode: "flat",
       dots: "0",
-      image_tags: "collection:3330448",
+      image_tags: "likes:atulvi",
       image_foreground: "#ffffff",
       clock_seperator: "colon",
       clock_format: "12H",
@@ -99,6 +101,8 @@ export class Ikigai extends Component {
       widget: "clock",
       font: "Circular",
       background_cycle: "never",
+      widget_x: "center",
+      widget_y: "center",
       location: JSON.stringify({
         value: "139.7594549,35.6828387",
         label: "Tokyo, Japan",
@@ -294,6 +298,14 @@ export class Ikigai extends Component {
     xhr.send();
   };
 
+  xy_to_flex = {
+    center: "center",
+    left: "flex-start",
+    right: "flex-end",
+    top: "flex-start",
+    bottom: "flex-end",
+  };
+
   render() {
     let widgets = {
       clock: ClockWidget,
@@ -345,20 +357,29 @@ export class Ikigai extends Component {
         : image_foreground;
 
     return (
-      <div>
-        <div className="center-boy">
-          <WidgetComponent
-            foreground={foreground}
-            font={font}
-            clock_border={clock_border}
-            weather_format={weather_format}
-            clock_seperator={clock_seperator}
-            clock_format={clock_format}
-            temprature_unit={temprature_unit}
-            message_size={message_size}
-            message={message}
-            location={location}
-          />
+      <React.Fragment>
+        <div
+          class="flex-container"
+          style={{
+            justifyContent: this.xy_to_flex[this.state.widget_x],
+            textAlign: this.state.widget_x,
+            alignItems: this.xy_to_flex[this.state.widget_y],
+          }}
+        >
+          <div class="widget">
+            <WidgetComponent
+              foreground={foreground}
+              font={font}
+              clock_border={clock_border}
+              weather_format={weather_format}
+              clock_seperator={clock_seperator}
+              clock_format={clock_format}
+              temprature_unit={temprature_unit}
+              message_size={message_size}
+              message={message}
+              location={location}
+            />
+          </div>
         </div>
         <div>
           {loadingImage && (
@@ -417,7 +438,7 @@ export class Ikigai extends Component {
         <Modal
           size="lg"
           animation={false}
-          show={true}
+          show={modalVisible}
           onHide={this.handleClose}
         >
           <Modal.Header closeButton>
@@ -434,7 +455,7 @@ export class Ikigai extends Component {
             </Container>
           </Modal.Body>
         </Modal>
-      </div>
+      </React.Fragment>
     );
   }
 }

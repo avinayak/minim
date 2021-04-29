@@ -6,7 +6,6 @@ export class CustomMessageWidget extends Component {
     return (
       <div
         style={{
-          textAlign: "center",
           color: this.props.foreground,
           fontSize: parseInt(this.props.message_size),
           fontFamily: this.props.font,
