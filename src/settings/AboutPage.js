@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Button from "react-bootstrap/Button";
 
 class AboutPage extends Component {
   render() {
@@ -8,8 +9,10 @@ class AboutPage extends Component {
           <br />
           <img src="./icon128.png"></img>
           <br />
-          Minim v2.2.0 - "Detach"
-          <br /> <br />
+          Minim v2.2.0
+          <br />
+          
+          <br />
           <small>
             <b>
               Designed by{" "}
@@ -34,6 +37,13 @@ class AboutPage extends Component {
             <br />
             <br />
             <br />
+            <a
+            className="ee"
+            target="_blank"
+            href="https://nkanaev.com/zen101/en/077/"
+          >
+            (꒡ꜙ꒡)
+          </a>
           </small>
         </center>
       </div>

@@ -6,6 +6,11 @@
   height: 100%;
 }
 
+.ee {
+  color: white;
+  text-decoration: none !important;
+}
+
 .settings-button {
   font-family: "Material Icons";
   font-size: 25px !important;
@@ -29,27 +34,22 @@
 }
 @font-face {
   font-family: Futura;
-  src: url("fonts/Futura.ttf");
+  src: url("fonts/renner-medium.otf");
 }
 
 @font-face {
-  font-family: SharpGrotesk;
-  src: url("fonts/SharpGrotesk.ttf");
+  font-family: CardoRegular;
+  src: url("fonts/Cardo-Regular.ttf");
+}
+
+@font-face {
+  font-family: CardoItalic;
+  src: url("fonts/Cardo-Italic.ttf");
 }
 
 @font-face {
   font-family: Product;
   src: url("fonts/Product.ttf");
-}
-
-@font-face {
-  font-family: BebasNeue;
-  src: url("fonts/BebasNeue.ttf");
-}
-
-@font-face {
-  font-family: Milea;
-  src: url("fonts/Milea.ttf");
 }
 
 .buttons:hover {
@@ -114,7 +114,7 @@
 .flex-container {
   height: 100%;
   margin: 0;
-  padding: 50px;
+  padding: 50px 40px;
   display: flex;
 }
 
@@ -157,6 +157,8 @@
   padding-left: 14px;
 }
 .modal-content {
+  opacity: .97;
+
   position: fixed !important;
   right: -2px;
   width: 363px !important;
@@ -265,6 +267,19 @@
   height: 10px;
 }
 
+.datepicker {
+  padding: 13px;
+  background: #f7f7f9;
+  margin-bottom: 10px;
+}
+
+.react-datetime-picker__wrapper {
+  border: none !important;
+  color: #55595c !important;
+}
+.react-datetime-picker__inputGroup__input {
+  color: #55595c !important;
+}
 .spinner-wrap {
   position: absolute;
   bottom: 0px;
@@ -328,6 +343,9 @@
   border-radius: 0% !important;
   background-color: #212529 !important;
   width: 5px !important;
+}
+.rc-slider {
+  padding: 16px 0px !important;
 }
 
 .modal-title {

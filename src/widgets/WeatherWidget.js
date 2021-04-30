@@ -87,7 +87,7 @@ export class WeatherWidget extends Component {
       <div
         style={{
           color: this.props.foreground,
-          fontSize,
+          fontSize: parseInt(this.props.widget_font_size) * 4 + 20,
           fontFamily: this.props.font,
           padding: "1px 45px"
         }}

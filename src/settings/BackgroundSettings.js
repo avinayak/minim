@@ -68,47 +68,6 @@ class BackgroundSettings extends Component {
           }}
         />
         <br />
-        <Form.Group
-          onChange={(e) => {
-            setStore("font", e.target.value);
-          }}
-        >
-          <Form.Label>Font</Form.Label>
-          <Form.Control defaultValue={s.font} as="select">
-            <option value="Circular">Jakarta Sans</option>
-            <option value="Futura">Futura</option>
-            <option value="Product">Product</option>
-            <option value="SharpGrotesk">Sharp Grotesk</option>
-            <option value="BebasNeue">Bebas Neue</option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Label>Widget Position</Form.Label>
-        <div className="half-select-box">
-          <Form.Group
-            className="half-select"
-            onChange={(e) => {
-              setStore("widget_x", e.target.value);
-            }}
-          >
-            <Form.Control defaultValue={s.widget_x} as="select">
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group
-            className="half-select"
-            onChange={(e) => {
-              setStore("widget_y", e.target.value);
-            }}
-          >
-            <Form.Control defaultValue={s.widget_y} as="select">
-              <option value="top">Top</option>
-              <option value="center">Center</option>
-              <option value="bottom">Bottom</option>
-            </Form.Control>
-          </Form.Group>
-        </div>
         {s.background_mode === "image" && (
           <Form.Group
             onChange={(e) => {

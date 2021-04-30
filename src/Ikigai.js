@@ -10,12 +10,13 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import BlankWidget from "./widgets/BlankWidget";
 import ClockWidget from "./widgets/ClockWidget";
 import CustomMessageWidget from "./widgets/CustomMessageWidget";
-import colors from "./settings/colors";
-import WeatherWidget from "./widgets/WeatherWidget";
-
 import Settings from "./settings/Settings";
+import Timer from "./widgets/Timer";
+import WeatherWidget from "./widgets/WeatherWidget";
+import colors from "./settings/colors";
 
 const Tooltipify = ({ message, children }) => {
   return (
@@ -57,8 +58,12 @@ export class Ikigai extends Component {
       temprature_unit: localStorage.getItem("temprature_unit"),
       widget_x: localStorage.getItem("widget_x"),
       widget_y: localStorage.getItem("widget_y"),
-      message_size: localStorage.getItem("message_size"),
+      widget_font_size: localStorage.getItem("widget_font_size"),
       message: localStorage.getItem("message"),
+      timer_pre_text: localStorage.getItem("timer_pre_text"),
+      timer_post_text: localStorage.getItem("timer_post_text"),
+      timer_time: localStorage.getItem("timer_time"),
+      timer_format: localStorage.getItem("timer_format"),
       image_foreground: localStorage.getItem("image_foreground"),
       image_tags: localStorage.getItem("image_tags"),
       color_index: localStorage.getItem("color_index"),
@@ -96,10 +101,14 @@ export class Ikigai extends Component {
       temprature_unit: "C",
       clock_border: "none",
       weather_format: "ts",
-      message_size: "50",
+      widget_font_size: "16",
       message: "Hello!",
+      timer_pre_text: "It has been ",
+      timer_post_text: "  \nsince man first landed \non the moon.",
+      timer_time: "Sun Jul 20 1969 20:17:00 GMT+0000",
+      timer_format: "t",
       widget: "clock",
-      font: "Circular",
+      font: "Product",
       background_cycle: "never",
       widget_x: "center",
       widget_y: "center",
@@ -310,6 +319,8 @@ export class Ikigai extends Component {
     let widgets = {
       clock: ClockWidget,
       message: CustomMessageWidget,
+      timer: Timer,
+      blank: BlankWidget,
       weather: WeatherWidget,
     };
 
@@ -331,8 +342,12 @@ export class Ikigai extends Component {
       clock_seperator,
       clock_format,
       temprature_unit,
-      message_size,
+      widget_font_size,
       message,
+      timer_pre_text,
+      timer_post_text,
+      timer_time,
+      timer_format,
       image_foreground,
       image_tags,
       color_index,
@@ -375,8 +390,12 @@ export class Ikigai extends Component {
               clock_seperator={clock_seperator}
               clock_format={clock_format}
               temprature_unit={temprature_unit}
-              message_size={message_size}
+              widget_font_size={widget_font_size}
               message={message}
+              timer_post_text={timer_post_text}
+              timer_pre_text={timer_pre_text}
+              timer_time={timer_time}
+              timer_format={timer_format}
               location={location}
             />
           </div>
@@ -445,7 +464,9 @@ export class Ikigai extends Component {
             <Modal.Title>Settings</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Container>
+            <Container style={{
+              overflowY: "auto"
+            }}>
               <Settings
                 setStore={this.setStore}
                 s={this.state}

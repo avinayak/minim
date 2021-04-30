@@ -2,7 +2,7 @@ import React, { Component } from "react";
 const seperators = {
   colon: ":",
   space: " ",
-  none: ""
+  none: "",
 };
 
 let timer = null;
@@ -10,8 +10,11 @@ export class ClockWidget extends Component {
   constructor() {
     super();
     this.state = {
-      timeString: this.getTime(localStorage.getItem("clock_seperator"), localStorage.getItem("clock_format")),
-      ap: this.getAP()
+      timeString: this.getTime(
+        localStorage.getItem("clock_seperator"),
+        localStorage.getItem("clock_format")
+      ),
+      ap: this.getAP(),
     };
   }
 
@@ -26,7 +29,7 @@ export class ClockWidget extends Component {
         timeString: this.getTime(
           this.props.clock_seperator,
           this.props.clock_format
-        )
+        ),
       });
     }, 1000);
   }
@@ -34,7 +37,7 @@ export class ClockWidget extends Component {
   getAP = () => {
     var date = new Date();
     var hours = date.getHours();
-    return hours >= 12 ? "P" : "A";
+    return hours >= 12 ? "PM" : "AM";
   };
 
   getTime = (seperator, clock_format) => {
@@ -55,28 +58,29 @@ export class ClockWidget extends Component {
   };
 
   render() {
+    let borderWidth = (20 + parseInt(this.props.widget_font_size)) * 0.25;
+    let padding = (20 + parseInt(this.props.widget_font_size)) * 0.7;
+    let round = (20 + parseInt(this.props.widget_font_size)) * 0.7;
     return (
       <div
         style={{
           color: this.props.foreground,
-          fontSize: 120,
+          fontSize: parseInt(this.props.widget_font_size) * 4 + 40,
           fontFamily: this.props.font,
-          padding: "1px 45px",
+          padding: `1px ${padding}px`,
           border: `${
-            this.props.clock_border==="rounded"
+            this.props.clock_border === "rounded"
               ? "solid"
               : this.props.clock_border
-          } 10px`,
-          borderRadius: this.props.clock_border==="rounded" ? 30 : 0
+          } ${borderWidth}px`,
+          borderRadius: this.props.clock_border === "rounded" ? round : 0,
         }}
       >
         <span>
-          {this.state.timeString}
-          <span>
-            {this.props.clock_format==="12HAP" && (
-              <sup className="ampm">{this.state.ap}</sup>
-            )}
-          </span>
+          {`${this.state.timeString} ${
+            this.props.clock_format === "12HAP" ? this.state.ap : ""
+          }`}
+
         </span>
       </div>
     );
