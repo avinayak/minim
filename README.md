@@ -2,7 +2,7 @@
 
 The minimalist new-tab extension.
 
-[![app](https://raw.githubusercontent.com/avinayak/minim/master/screenshots/screencapture-chrome-newtab-2020-02-18-17_19_48.png)](https://chrome.google.com/webstore/detail/minim-a-minimalist-new-ta/kpblgdhkligkbbnbpkigppblggflihgn)
+[![app](https://imgur.com/2072fa43-e13a-4fb3-8890-2d51d8145ae0)](https://chrome.google.com/webstore/detail/minim-a-minimalist-new-ta/kpblgdhkligkbbnbpkigppblggflihgn)
 
 
 Run it without installing here https://avinayak.github.io/minim/
