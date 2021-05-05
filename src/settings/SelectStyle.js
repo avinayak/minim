@@ -1,5 +1,3 @@
-import React, { Component } from "react";
-
 const customStyles = {
   option: (provided, state) => ({
     ...provided,

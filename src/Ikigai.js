@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import {
   Container,
-  Row,
-  Col,
   Modal,
-  Form,
-  Tabs,
-  Tab,
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
@@ -14,7 +9,7 @@ import BlankWidget from "./widgets/BlankWidget";
 import ClockWidget from "./widgets/ClockWidget";
 import CustomMessageWidget from "./widgets/CustomMessageWidget";
 import Settings from "./settings/Settings";
-import Timer from "./widgets/Timer";
+import TimerWidget from "./widgets/TimerWidget";
 import WeatherWidget from "./widgets/WeatherWidget";
 import colors from "./settings/colors";
 
@@ -93,7 +88,7 @@ export class Ikigai extends Component {
       color_index: 0,
       background_mode: "flat",
       dots: "0",
-      image_tags: "likes:atulvi",
+      image_tags: "collection:3330448",
       image_foreground: "#ffffff",
       clock_seperator: "colon",
       clock_format: "12H",
@@ -106,7 +101,7 @@ export class Ikigai extends Component {
       timer_pre_text: "It has been ",
       timer_post_text: "  \nsince man first landed \non the moon.",
       timer_time: "Sun Jul 20 1969 20:17:00 GMT+0000",
-      timer_format: "t",
+      timer_format: "tc",
       widget: "clock",
       font: "Product",
       background_cycle: "never",
@@ -277,13 +272,6 @@ export class Ikigai extends Component {
     }
   };
 
-  openImage = () => {
-    let im_index = localStorage.getItem("image_index", "0");
-    let imurl = localStorage.getItem("unsplash_image_download" + im_index);
-    console.log(imurl);
-    var win = window.open(imurl, "_blank");
-    win.focus();
-  };
 
   toDataUrl = (url, callback) => {
     console.log(url);
@@ -319,8 +307,8 @@ export class Ikigai extends Component {
     let widgets = {
       clock: ClockWidget,
       message: CustomMessageWidget,
-      timer: Timer,
-      blank: BlankWidget,
+      timer: TimerWidget,
+      nothing: BlankWidget,
       weather: WeatherWidget,
     };
 
@@ -334,7 +322,6 @@ export class Ikigai extends Component {
       image_index,
       filter,
       font,
-      background_cycle,
       location,
       widget,
       clock_border,
@@ -349,7 +336,6 @@ export class Ikigai extends Component {
       timer_time,
       timer_format,
       image_foreground,
-      image_tags,
       color_index,
     } = this.state;
 
@@ -455,6 +441,7 @@ export class Ikigai extends Component {
         {dots === "1" && <div className="tint-layer dots" />}
 
         <Modal
+          scrollable={true}
           size="lg"
           animation={false}
           show={modalVisible}

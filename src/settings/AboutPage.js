@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import Button from "react-bootstrap/Button";
-
 class AboutPage extends Component {
   render() {
     return (
       <div>
         <center>
           <br />
-          <img src="./icon128.png"></img>
+          <img src="./icon128.png" alt="Minim logo. It is set of three pebbles in minimalist design balanced on top of each other."></img>
           <br />
           Minim v2.2.0
           <br />
@@ -25,7 +23,7 @@ class AboutPage extends Component {
             <br />
             <br />
             <br />
-            <a href="https://ko-fi.com/S6S51GBT3" target="_blank">
+            <a href="img/kofi2.png" target="_blank">
               <img
                 height="36"
                 style={{ border: "0px", height: "36px" }}
@@ -40,6 +38,7 @@ class AboutPage extends Component {
             <a
             className="ee"
             target="_blank"
+            rel="noopener noreferrer"
             href="https://nkanaev.com/zen101/en/077/"
           >
             (꒡ꜙ꒡)

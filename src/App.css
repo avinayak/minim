@@ -156,14 +156,6 @@
   font-weight: bolder;
   padding-left: 14px;
 }
-.modal-content {
-  opacity: .97;
-
-  position: fixed !important;
-  right: -2px;
-  width: 363px !important;
-  top: -2px;
-}
 
 @keyframes wobblebar-loader {
   0% {
@@ -299,19 +291,27 @@
   background-size: 30px 30px;
 }
 
-.modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-color: #fff;
-  background-clip: padding-box;
-  border-radius: 0.6rem;
-  outline: 0;
-  border: none !important;
-  margin: 32px;
-  box-shadow: rgb(0 0 0 / 30%) -9px 12px 20px 1px;
+@media only screen and (min-device-width: 1024px) {
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: 0.6rem;
+    outline: 0;
+    border: none !important;
+    margin: 32px;
+    box-shadow: rgb(0 0 0 / 30%) -9px 12px 20px 1px;
+    opacity: 0.95;
+    position: fixed !important;
+    right: -2px;
+    width: 363px !important;
+    z-index: 10040;
+    overflow: auto;
+    overflow-y: auto;
+  }
 }
 
 .toggle-button {

@@ -9,10 +9,12 @@ export class CustomMessageWidget extends Component {
           fontSize: parseInt(this.props.widget_font_size) * 4 + 20,
           fontFamily: this.props.font,
         }}
-        
       >
-        <span style={{whiteSpace:"break-spaces" }}>{this.props.message}</span>
-        {/* <span dangerouslySetInnerHTML={{__html: this.props.message}} ></span> */}
+        {/* <span style={{whiteSpace:"break-spaces" }}>{this.props.message}</span> */}
+        <span
+          style={{ whiteSpace: "break-spaces" }}
+          dangerouslySetInnerHTML={{ __html: this.props.message }}
+        ></span>
       </div>
     );
   }

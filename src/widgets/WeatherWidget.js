@@ -77,9 +77,7 @@ export class WeatherWidget extends Component {
       </span>
     );
     
-    let fontSize = Math.max( (123.33 - 3.333*summary.length),40);
     if (this.props.weather_format === "t") {
-      fontSize = 120;
       weather = <span>{temprature}&deg;</span>;
     }
 

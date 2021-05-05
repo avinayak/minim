@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import {
   Row,
   Col,
-  Form,
-  Tabs,
-  Tab,
-  OverlayTrigger,
-  Tooltip,
+  Form
 } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 
@@ -33,7 +29,7 @@ class TimerSettings extends Component {
           </Col>
 
           <Col md={12}>
-            <Form.Label>Target Time</Form.Label>
+            <Form.Label>Target Time (Month First)</Form.Label>
             <div className="datepicker">
               <DateTimePicker
                 onChange={(e) => {
@@ -79,7 +75,8 @@ class TimerSettings extends Component {
                 <option value="h">Hours</option>
                 <option value="d">Days</option>
                 <option value="y">Years</option>
-                <option value="t">Human Friendly</option>
+                <option value="t">Human Friendly (Trimmed)</option>
+                <option value="tc">Human Friendly</option>
               </Form.Control>
             </Form.Group>
           </Col>

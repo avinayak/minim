@@ -1,36 +1,53 @@
 import React, { Component } from "react";
 
-
-function millisecondsToStr (milliseconds) {
-    // TIP: to find current time in milliseconds, use:
-    // var  current_time_milliseconds = new Date().getTime();
-
-    function numberEnding (number) {
-        return (number > 1) ? 's' : '';
-    }
-
-    var temp = Math.floor(milliseconds / 1000);
-    var years = Math.floor(temp / 31536000);
-    if (years) {
-        return years + ' year' + numberEnding(years);
-    }
-    //TODO: Months! Maybe weeks? 
-    var days = Math.floor((temp %= 31536000) / 86400);
-    if (days) {
-        return days + ' day' + numberEnding(days);
-    }
-    var hours = Math.floor((temp %= 86400) / 3600);
-    if (hours) {
-        return hours + ' hour' + numberEnding(hours);
-    }
-    var minutes = Math.floor((temp %= 3600) / 60);
-    if (minutes) {
-        return minutes + ' minute' + numberEnding(minutes);
-    }
+function numberEnding(number) {
+  return number > 1 ? "s" : "";
 }
 
+function millisecondsToStr(milliseconds) {
+  // TIP: to find current time in milliseconds, use:
+  // var  current_time_milliseconds = new Date().getTime();
 
-export class Timer extends Component {
+  var temp = Math.floor(milliseconds / 1000);
+  var years = Math.floor(temp / 31536000);
+  if (years) {
+    return years + " year" + numberEnding(years);
+  }
+  //TODO: Months! Maybe weeks?
+  var days = Math.floor((temp %= 31536000) / 86400);
+  if (days) {
+    return days + " day" + numberEnding(days);
+  }
+  var hours = Math.floor((temp %= 86400) / 3600);
+  if (hours) {
+    return hours + " hour" + numberEnding(hours);
+  }
+  var minutes = Math.floor((temp %= 3600) / 60);
+  if (minutes) {
+    return minutes + " minute" + numberEnding(minutes);
+  }
+}
+
+function millisecondsToStrComplete(milliseconds) {
+  var seconds = Math.floor(milliseconds / 1000);
+  var minutes = Math.floor(seconds / 60);
+  var hours = Math.floor(minutes / 60);
+  var days = Math.floor(hours / 24);
+  var years = Math.floor(days / 365);
+
+  days = days - years * 365;
+  hours = hours - days * 24 - years * 365 * 24 ;
+  minutes = minutes - days * 24 * 60 - hours * 60 - years * 365 * 24 * 60;
+  seconds = seconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60 - years * 365 * 24 * 60 * 60;
+  var timeStr = "";
+  if (years) timeStr += `${years} year${numberEnding(years)} `;
+  if (days) timeStr += `${days} day${numberEnding(days)} `;
+  if (hours) timeStr += `${hours} hour${numberEnding(hours)} `;
+  if (minutes) timeStr += `${minutes} minute${numberEnding(minutes)}`;
+  return timeStr;
+}
+
+export class TimerWidget extends Component {
   constructor() {
     super();
     this.state = {
@@ -53,12 +70,14 @@ export class Timer extends Component {
         diffOut = Math.floor(diffTime / (1000 * 60));
       } else if (this.props.timer_format === "h") {
         diffOut = Math.floor(diffTime / (1000 * 60 * 60));
-      } else if (this.props.timer_format == "d") {
+      } else if (this.props.timer_format === "d") {
         diffOut = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      } else if (this.props.timer_format == "y") {
+      } else if (this.props.timer_format === "y") {
         diffOut = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
-      }else if (this.props.timer_format == "t") {
-        diffOut = millisecondsToStr(diffTime)
+      } else if (this.props.timer_format === "t") {
+        diffOut = millisecondsToStr(diffTime);
+      }else if (this.props.timer_format === "tc") {
+        diffOut = millisecondsToStrComplete(diffTime);
       }
 
       //   else if (this.props.timer_format === "sa") {
@@ -72,7 +91,7 @@ export class Timer extends Component {
       //   } else if (this.props.timer_format == "ya") {
       //     diffOut = (diffTime / (1000 * 60 * 60 * 24 * 365)).toFixed(8);
       //   }
-      localStorage.setItem("__cached_timer_out", diffOut)
+      localStorage.setItem("__cached_timer_out", diffOut);
       this.setState({ clock: diffOut });
     }, 1000);
   }
@@ -108,4 +127,4 @@ export class Timer extends Component {
   }
 }
 
-export default Timer;
+export default TimerWidget;

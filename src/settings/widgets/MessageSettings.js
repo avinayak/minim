@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import {
   Row,
   Col,
-  Form,
-  Tabs,
-  Tab,
-  OverlayTrigger,
-  Tooltip,
+  Form
 } from "react-bootstrap";
 
 class MessageSettings extends Component {

@@ -7,6 +7,14 @@ import UnsplashSelect from "./UnsplashSelect";
 import "rc-slider/assets/index.css";
 
 class BackgroundSettings extends Component {
+  openImage = () => {
+    let im_index = localStorage.getItem("image_index", "0");
+    let imurl = localStorage.getItem("unsplash_image_download" + im_index);
+    console.log(imurl);
+    var win = window.open(imurl, "_blank");
+    win.focus();
+  };
+
   render() {
     let { setStore, s, refetchAndSetImage } = this.props;
     return (

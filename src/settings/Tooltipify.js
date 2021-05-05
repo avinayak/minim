@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { OverlayTrigger,Tooltip } from "react-bootstrap";
 
 const Tooltipify = ({ message, children }) => {
