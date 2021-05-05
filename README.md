@@ -7,4 +7,4 @@ The minimalist new-tab extension.
 
 Run it without installing here https://avinayak.github.io/minim/
 
-[![app](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_496x150.png)](https://chrome.google.com/webstore/detail/minim-a-minimalist-new-ta/kpblgdhkligkbbnbpkigppblggflihgn)
+[![app](https://storage.googleapis.com/chrome-gcs-uploader.appspot.com/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/YT2Grfi9vEBa2wAPzhWa.png)](https://chrome.google.com/webstore/detail/minim-a-minimalist-new-ta/kpblgdhkligkbbnbpkigppblggflihgn)
