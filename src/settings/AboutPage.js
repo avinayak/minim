@@ -23,11 +23,11 @@ class AboutPage extends Component {
             <br />
             <br />
             <br />
-            <a href="img/kofi2.png" target="_blank">
+            <a href="https://ko-fi.com/S6S51GBT3" target="_blank">
               <img
                 height="36"
                 style={{ border: "0px", height: "36px" }}
-                src="https://az743702.vo.msecnd.net/cdn/kofi2.png?v=2"
+                src="./kofi2.png"
                 border="0"
                 alt="Buy Me a Coffee at ko-fi.com"
               />
