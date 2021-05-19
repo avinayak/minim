@@ -85,7 +85,7 @@ export class ClockWidget extends Component {
           {`${this.state.timeString}${this.props.clock_seperator==="newline"?"\n":""}`}
         </span>
         <span>
-          {this.props.clock_format === "12HAP" ? this.state.ap : ""}
+          {this.props.clock_format === "12HAP" ? ((this.props.clock_seperator==="newline"?"":" ") + this.state.ap) : ""}
         </span>
       </div>
     );
