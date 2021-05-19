@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 const seperators = {
   colon: ":",
+  newline: "\n",
   space: " ",
   none: "",
 };
@@ -58,16 +59,20 @@ export class ClockWidget extends Component {
   };
 
   render() {
-    let borderWidth = (20 + parseInt(this.props.widget_font_size)) * 0.25;
-    let padding = (20 + parseInt(this.props.widget_font_size)) * 0.7;
-    let round = (20 + parseInt(this.props.widget_font_size)) * 0.7;
+    let font_size = parseInt(this.props.widget_font_size)
+    let borderWidth = (20 + font_size) * 0.25;
+    let padding = (20 + font_size) * 0.7;
+    let round = (20 + font_size) * 0.7;
     return (
       <div
         style={{
           color: this.props.foreground,
-          fontSize: parseInt(this.props.widget_font_size) * 4 + 40,
+          whiteSpace: "break-spaces",
+          lineHeight: `${font_size*4+ 40}px`,
+          letterSpacing: '4px',
+          fontSize: font_size * 4 + 40,
           fontFamily: this.props.font,
-          padding: `1px ${padding}px`,
+          padding: `16px ${padding}px`,
           border: `${
             this.props.clock_border === "rounded"
               ? "solid"
@@ -77,10 +82,10 @@ export class ClockWidget extends Component {
         }}
       >
         <span>
-          {`${this.state.timeString} ${
-            this.props.clock_format === "12HAP" ? this.state.ap : ""
-          }`}
-
+          {`${this.state.timeString}${this.props.clock_seperator==="newline"?"\n":""}`}
+        </span>
+        <span>
+          {this.props.clock_format === "12HAP" ? this.state.ap : ""}
         </span>
       </div>
     );

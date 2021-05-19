@@ -19,7 +19,7 @@ class AboutPage extends Component {
             <br />
             <br />
             Weather Data by <a href="https://darksky.net">Dark Sky</a> <br />
-            Backgrounds from <a href="https://unsplash.com">Unslpash</a>
+            Backgrounds from <a href="https://unsplash.com">Unsplash</a>
             <br />
             <br />
             <br />

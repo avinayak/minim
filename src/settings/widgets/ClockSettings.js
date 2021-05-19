@@ -19,9 +19,9 @@ class ClockSettings extends Component {
             >
               <Form.Label>Border Style</Form.Label>
               <Form.Control defaultValue={s.clock_border} as="select">
-                <option value="none">none</option>
-                <option value="solid">solid</option>
-                <option value="rounded">rounded</option>
+                <option value="none">None</option>
+                <option value="solid">Solid</option>
+                <option value="rounded">Rounded</option>
               </Form.Control>
             </Form.Group>
           </Col>
@@ -34,9 +34,10 @@ class ClockSettings extends Component {
             >
               <Form.Label>Seperator</Form.Label>
               <Form.Control defaultValue={s.clock_seperator} as="select">
-                <option value="colon">colon</option>
-                <option value="none">none</option>
-                <option value="space">space</option>
+              <option value="none">None</option>
+                <option value="colon">Colon</option>
+                <option value="newline">New Line</option>
+                <option value="space">Space</option>
               </Form.Control>
             </Form.Group>
           </Col>
