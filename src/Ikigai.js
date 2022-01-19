@@ -349,6 +349,7 @@ export class Ikigai extends Component {
           }
         : {
             background: `url(${image}) no-repeat center center`,
+            backgroundSize: "cover",
             filter,
           };
 
