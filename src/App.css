@@ -132,6 +132,7 @@
 
 .background-layer {
   transition: background 0.5s ease, filter 1.5s ease;
+  background-size: cover !important;
   background: black;
   position: absolute;
   width: 100%;

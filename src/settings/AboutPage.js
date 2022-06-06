@@ -7,7 +7,7 @@ class AboutPage extends Component {
           <br />
           <img src="./icon128.png" alt="Minim logo. It is set of three pebbles in minimalist design balanced on top of each other."></img>
           <br />
-          Minim v2.2.0
+          Minim v2.2.3
           <br />
           
           <br />

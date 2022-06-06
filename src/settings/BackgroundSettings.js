@@ -86,6 +86,8 @@ class BackgroundSettings extends Component {
             <Form.Control defaultValue={s.background_cycle} as="select">
               <option value="never">Never</option>
               <option value="tab">Every New Tab</option>
+              <option value="60">Every Minute</option>
+              <option value="300">Every 5 Minutes</option>
               <option value="900">Every 15 Minutes</option>
               <option value="3600">Every Hour</option>
               <option value="86400">Every Day</option>
