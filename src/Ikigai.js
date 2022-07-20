@@ -149,6 +149,10 @@ export class Ikigai extends Component {
         let time_now = Math.round(new Date().getTime() / 1000);
         let background_update_freq = parseInt(this.state.background_cycle);
 
+        if (background_update_freq == 86400) {
+          background_last_updated = new Date(background_last_updated * 1000).setHours(0,0,0,0)/1000;
+        }
+
         if (background_last_updated + background_update_freq <= time_now) {
           this.refetchAndSetImageHidden();
           let time_now = Math.round(new Date().getTime() / 1000);
