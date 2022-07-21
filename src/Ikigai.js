@@ -245,6 +245,10 @@ export class Ikigai extends Component {
         localStorage.getItem("background_last_updated")
       );
 
+      if (background_update_freq == 86400) {
+        background_last_updated = new Date(background_last_updated * 1000).setHours(0,0,0,0)/1000;
+      }
+
       console.log(
         `Next Background change at ${this.unixToHumanTime(
           background_update_freq + background_last_updated
