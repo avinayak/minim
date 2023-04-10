@@ -1,0 +1,10 @@
+query citySearch($query: String!)  {	
+  citySearch(query: $query) {
+    id
+    name
+    country
+    lat
+    lon
+    timezone
+  }
+}

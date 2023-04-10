@@ -1,0 +1,10 @@
+query weather($lat: Float!, $lon: Float!) {
+  weather(lat: $lat, lon: $lon) {
+    temp
+    feelsLike
+    description
+    descriptionAlt
+    sunrise
+    sunset
+  }
+}

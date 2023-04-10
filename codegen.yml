@@ -1,0 +1,10 @@
+overwrite: true
+schema: "http://127.0.0.1:4000/api/graphql"
+documents: "src/**/*.gql"
+generates:
+  src/gql/:
+    preset: "client"
+    plugins: []
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

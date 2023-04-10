@@ -1,0 +1,24 @@
+query randomImageQuery(
+  $source: SourceTypes!
+  $query: String!
+  $category:  CategoryTypes!
+) {
+  randomImage(source: $source, query: $query, category: $category) {
+    id
+    altDescription
+    color
+    description
+    links {
+      download
+    }
+    urls {
+      full
+      thumb
+    }
+    user {
+      firstName
+      lastName
+      username
+    }
+  }
+}

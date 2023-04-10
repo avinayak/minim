@@ -1,0 +1,102 @@
+@keyframes wobblebar-loader {
+  0% {
+    left: 4px;
+  }
+  3% {
+    left: 104px;
+  }
+  6% {
+    left: 4px;
+  }
+  9% {
+    left: 104px;
+  }
+  12% {
+    left: 4px;
+  }
+  15% {
+    left: 104px;
+  }
+  18% {
+    left: 32px;
+  }
+  27% {
+    left: 32px;
+  }
+  30% {
+    left: 104px;
+  }
+  33% {
+    left: 4px;
+  }
+  36% {
+    left: 104px;
+  }
+  39% {
+    left: 4px;
+  }
+  42% {
+    left: 104px;
+  }
+  45% {
+    left: 4px;
+  }
+  48% {
+    left: 104px;
+  }
+  51% {
+    left: 52px;
+  }
+  63% {
+    left: 52px;
+  }
+  66% {
+    left: 4px;
+  }
+  69% {
+    left: 104px;
+  }
+  72% {
+    left: 4px;
+  }
+  75% {
+    left: 104px;
+  }
+  78% {
+    left: 4px;
+  }
+  81% {
+    left: 104px;
+  }
+  84% {
+    left: 72px;
+  }
+  94% {
+    left: 72px;
+  }
+  97% {
+    left: 104px;
+  }
+}
+/* :not(:required) hides this rule from IE9 and below */
+.wobblebar-loader:not(:required) {
+  background: #aaa;
+  display: inline-block;
+  overflow: hidden;
+  text-indent: -9999px;
+  width: 128px;
+  height: 2px;
+  position: relative;
+}
+.wobblebar-loader:not(:required)::after {
+  animation: wobblebar-loader 15000ms infinite ease;
+  background: white;
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0.1px;
+  left: 4px;
+  width: 42.33333px;
+  height: 10px;
+}
+
