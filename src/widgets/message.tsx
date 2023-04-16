@@ -1,28 +1,63 @@
-import {  WidgetType } from "../types";
+import { LabelledTextInput } from "../components/LabelledTextInput";
+import { TwoLineWidget } from "../components/TwoLineWidget";
+import { WidgetType } from "../types";
+import { useGridLayoutDispatch } from "./GridLayoutContext";
 
 export const messageWidget: WidgetType = {
   widgetCode: "message",
-  initialState: ()=>({
+  widgetName: "Message",
+  initialState: () => ({
     widgetCode: "message",
     fontSize: 4,
     borderStyle: "none",
-
-    messageText:
-      "Hello World!",
+    messageText: "Hello World!",
+    subText: "",
   }),
-  settingsForm: (widget) => <>settings from message!</>,
+  settingsForm: (widget) => {
+    const dispatch = useGridLayoutDispatch();
+
+    return (
+      <>
+        <LabelledTextInput
+          label="Message Text"
+          lines={3}
+          value={widget.messageText}
+          onChange={(messageText) => {
+            dispatch({
+              type: "UPDATE_WIDGET",
+              payload: {
+                ...widget,
+                messageText,
+              },
+            });
+          }}
+        />
+        <LabelledTextInput
+          label="Sub Text"
+          value={widget.subText}
+          onChange={(subText) => {
+            dispatch({
+              type: "UPDATE_WIDGET",
+              payload: {
+                ...widget,
+                subText,
+              },
+            });
+          }}
+        />
+      </>
+    );
+  },
   renderWidget: (widget) => (
-    <div>
-      <div style={{ fontSize: widget.fontSize  + "vh" }}>
-        {widget.messageText}
-      </div>
-    </div>
+    <TwoLineWidget
+      text={widget.messageText}
+      subText={widget.subText}
+      fontSize={widget.fontSize}
+    />
   ),
   preview: (widget) => (
     <div>
-      <div style={{ fontSize: "50px" }}>
-        I think therefore I am.
-      </div>
+      <div style={{ fontSize: "25px" }}>Hello World!</div>
     </div>
   ),
 };

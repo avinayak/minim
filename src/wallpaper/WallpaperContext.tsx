@@ -23,6 +23,8 @@ const WallpaperDispatchContext = createContext<
 export function WallpaperProvider({ children }: { children: React.ReactNode }) {
   let defaultWallpaper = {
     background: `url('https://images.unsplash.com/photo-1558826944-1e802b66a7d8?fit=crop&w=${screen.width}&h=${screen.height}'`,
+    grayScale: false,
+    texture: false,
     wallpaperType: "photography",
     wallpaperCategory: "XwrRKbw8nSI",
     color: "white",
@@ -35,7 +37,7 @@ export function WallpaperProvider({ children }: { children: React.ReactNode }) {
     },
     font: "Product",
     tint: 3,
-    shade: 40,
+    shade: 3,
     changeEvery: "hour",
   } as WallpaperContextType;
 

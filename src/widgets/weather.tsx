@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { LabelledSelector } from "../components/LabelledSelector";
 import { LabelledTextInput } from "../components/LabelledTextInput";
 import { LocationSelector } from "../components/LocationSelector";
+import { TwoLineWidget } from "../components/TwoLineWidget";
 import { WeatherDocument } from "../gql/graphql";
 import { WidgetType } from "../types";
 import { capitalizeFirstLetter } from "../utils";
@@ -23,6 +24,7 @@ const kelvinToCF = (kelvin: number, unit: string) => {
 
 export const weatherWidget: WidgetType = {
   widgetCode: "weather",
+  widgetName: "Weather",
   initialState: () => ({
     widgetCode: "weather",
     fontSize: 4,
@@ -30,6 +32,7 @@ export const weatherWidget: WidgetType = {
     temperature: 293,
     weatherCondition: "Snowy",
     tempraureUnit: "C",
+    subText: "Vancouver",
     display: "temperature_and_condition",
     city: {
       name: "Vancouver",
@@ -161,26 +164,16 @@ export const weatherWidget: WidgetType = {
     );
 
     return (
-      <div>
-        <span
-          style={{
-            fontSize: widget.fontSize + "vh",
-            whiteSpace: "pre",
-            lineHeight: "95%",
-          }}
-        >
-          {weatherText}
-        </span>
-        <br />
-        <span style={{ fontSize: widget.fontSize / 2 + "vh" }}>
-          {widget.subText}
-        </span>
-      </div>
+      <TwoLineWidget
+        text={weatherText}
+        fontSize={widget.fontSize}
+        subText={widget.subText}
+      />
     );
   },
   preview: (widget) => (
     <div>
-      <div style={{ fontSize: "50px" }}>9° Snow</div>
+      <div style={{ fontSize: "25px" }}>9° Snow</div>
     </div>
   ),
 };

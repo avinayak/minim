@@ -3,6 +3,7 @@ import { useGridLayoutDispatch } from "./GridLayoutContext";
 import { LabelledSelector } from "../components/LabelledSelector";
 import { Col, Container, Row } from "react-bootstrap";
 import { LabelledTextInput } from "../components/LabelledTextInput";
+import { TwoLineWidget } from "../components/TwoLineWidget";
 
 function extractTimeZoneName(tz: string) {
   return tz.replace(/_/g, " ").split("/").pop();
@@ -26,6 +27,8 @@ function printTime(hours12, ampm, minutes, seperator, timeFormat) {
 
 export const clockWidget: WidgetType = {
   widgetCode: "clock",
+  widgetName: "Clock",
+
   initialState: () => {
     return {
       widgetCode: "clock",
@@ -37,7 +40,7 @@ export const clockWidget: WidgetType = {
     };
   },
 
-  preview: () => <div style={{ fontSize: 4 + "vh" }}>11:28 PM</div>,
+  preview: () => <div style={{ fontSize: "25px" }}>12:34 PM</div>,
 
   settingsForm: (widget) => {
     const dispatch = useGridLayoutDispatch();
@@ -156,21 +159,11 @@ export const clockWidget: WidgetType = {
       widget.timeFormat
     );
     return (
-      <div>
-        <span
-          style={{
-            fontSize: widget.fontSize + "vh",
-            whiteSpace: "pre",
-            lineHeight: "95%",
-          }}
-        >
-          {time}
-        </span>
-        <br />
-        <span style={{ fontSize: widget.fontSize / 2 + "vh" }}>
-          {widget.subText}
-        </span>
-      </div>
+      <TwoLineWidget
+        text={time}
+        subText={widget.subText}
+        fontSize={widget.fontSize}
+      />
     );
   },
 };

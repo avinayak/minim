@@ -42,6 +42,13 @@ export const WallpaperSurface = ({ tick }: {}) => {
     }
   }, [tick]);
 
+  const wallpaperStyle = pick(wallpaper, [
+    "background",
+    "backgroundImage",
+    "blendMode",
+    "color",
+  ]);
+
   return (
     <div>
       <div
@@ -56,15 +63,19 @@ export const WallpaperSurface = ({ tick }: {}) => {
         }}
         className="tint"
       ></div>
-      <div
-        className="wallpaper"
-        style={pick(wallpaper, [
-          "background",
-          "backgroundImage",
-          "blendMode",
-          "color",
-        ])}
+      <div className="dots"
+        style={{
+          opacity: wallpaper.texture? 1 : 0,
+        }}
       ></div>
+      <div
+        className="wallpaper-container"
+        style={{
+          filter: wallpaper.grayScale ? `grayscale(1)` : ``,
+        }}
+      >
+        <div className="wallpaper" style={wallpaperStyle}></div>
+      </div>
     </div>
   );
 };

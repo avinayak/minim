@@ -25,3 +25,12 @@
 .container-fluid {
     padding: 0px !important;
 }
+
+.popover {
+    max-width: 500px !important;
+    width: 400px;
+    box-shadow: -9px 12px 20px 1px rgb(0 0 0/30%);
+    border-radius: 0.6rem;
+    border: none !important;
+    padding: 12px;
+}

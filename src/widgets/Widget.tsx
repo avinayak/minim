@@ -2,13 +2,15 @@ import { WidgetCodeType, WidgetMapType, WidgetPropertiesType } from "../types";
 import { clockWidget } from "./clock";
 import { messageWidget } from "./message";
 import { weatherWidget } from "./weather";
+import { timeOfDayWish } from "./timeOfDayWish";
 
 import "rc-slider/assets/index.css";
 
 export const widgetKeyMap: WidgetMapType = () =>( {
   clock: clockWidget,
   message: messageWidget,
-  weather: weatherWidget
+  weather: weatherWidget,
+  wish: timeOfDayWish
 });
 
 export const widgetKeys: WidgetCodeType[] = Object.keys(

@@ -7,6 +7,7 @@ import {
   useWallpaper,
   useWallpaperDispatch,
 } from "../wallpaper/WallpaperContext";
+import { BackgroundToggles } from "./BackgroundToggles";
 import { FlatWallpaperPicker } from "./WallpaperPickers/FlatWallpaperPicker";
 import { GradientWallpaperPicker } from "./WallpaperPickers/GradientWallpaperPicker";
 import { PhotographyWallpaperPicker } from "./WallpaperPickers/PhotographyWallpaperPicker";
@@ -109,6 +110,8 @@ export const WallpaperPicker = () => {
         }}
         currentValue={wallpaperState.shade}
       />
+  <BackgroundToggles/>
+      
     </>
   );
 };

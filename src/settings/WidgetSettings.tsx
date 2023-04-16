@@ -12,49 +12,20 @@ import { GeneralSettings } from "./GeneralSettings";
 import { Col, Container, Row } from "react-bootstrap";
 
 export const WidgetSettings = ({ selectedWidget }) => {
-  const { font } = useWallpaper();
-  const wallpaperDispatch = useWallpaperDispatch();
-
   const { widgets } = useGridLayout();
 
   const widget = widgets.find((w) => w.id === selectedWidget);
-
   const cellId = `${widget?.layout.x}-${widget?.layout.y}`;
-
-  const fontOptions = [
-    { label: "Product Sans", value: "Product" },
-    { label: "Jakarta Sans", value: "JakartaSans" },
-    { label: "Circular", value: "Circular" },
-    { label: "Futura", value: "Futura" },
-    { label: "DIN", value: "DINMediumRegular" },
-    { label: "Cardo Regular", value: "CardoRegular" },
-    { label: "Cardo Italic", value: "CardoItalic" },
-    { label: "system-ui", value: "system-ui" },
-  ];
   const wKeyMap = widgetKeyMap();
   return (
     <>
-      <LabelledSelector
-        label="Font"
-        options={fontOptions}
-        value={font}
-        onChange={(value) => {
-          wallpaperDispatch({
-            type: "UPDATE_FONT",
-            payload: value,
-          });
-        }}
-      />
-
       {wKeyMap[widget?.widgetCode] ? (
         <>
           <div>{wKeyMap[widget?.widgetCode].settingsForm(widget)}</div>
           <CellSettings cellId={cellId} />
           <GeneralSettings widget={widget} />
         </>
-      ) : (
-        <div className="widget-edit-empty">Click on a widget to edit it</div>
-      )}
+      ) : null}
     </>
   );
 };
@@ -73,7 +44,7 @@ function CellSettings({ cellId }) {
 
   return (
     <>
-    <br/>
+      <br />
       <Container fluid>
         <Row>
           {showStacking && (

@@ -42,30 +42,55 @@ mkdir $TEMP_DIR
 cp -r dist/* $TEMP_DIR
 
 # 2. Add a Chrome extension manifest JSON for a new tab extension
-# Increment the manifest extension version based on the BUILD_NUMBER file contents
-BUILD_NUMBER_FILE="BUILD_NUMBER"
-VERSION=$(cat $BUILD_NUMBER_FILE)
-NEW_VERSION=$((VERSION + 1))
+JSON_FILE="src/version.json"
+
+# Extract the version from the JSON file
+version=$(jq -r '.version' "$JSON_FILE")
+
+# Increment the build number
+IFS='.' read -ra version_parts <<< "$version"
+build_number=$((version_parts[2] + 1))
+new_version="${version_parts[0]}.${version_parts[1]}.$build_number"
+new_version_package_name=minim_v${version_parts[0]}_${version_parts[1]}_$build_number.zip
+
+# Print the updated version
+echo "Updated version: $new_version"
 
 MANIFEST_FILE="$TEMP_DIR/manifest.json"
 cat > $MANIFEST_FILE <<- EOM
 {
-  "manifest_version": 2,
-  "name": "New Tab Extension",
-  "version": "3.0.$NEW_VERSION",
+  "manifest_version": 3,
+  "name": "Minim",
+  "description": "A minimal newtab for Chrome",
+  "version": "$new_version",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": ["chrome://newtab/"],
   "chrome_url_overrides": {
     "newtab": "index.html"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
 }
 EOM
 
+cp src/logos/* $TEMP_DIR
+
 # 3. Zip the temp folder to a new file
 rm -f *.zip
 
-ZIP_FILE="minim_v3_0_${NEW_VERSION}.zip"
-zip -r $ZIP_FILE $TEMP_DIR
+zip -r $new_version_package_name $TEMP_DIR
 
-# 5. Bump the build number file content
-echo $NEW_VERSION > $BUILD_NUMBER_FILE
+# Update the version in the JSON file and save it
+jq ".version = \"$new_version\"" "$JSON_FILE" > tmp.json && mv tmp.json "$JSON_FILE"
 
 echo "Chrome extension created: $ZIP_FILE"

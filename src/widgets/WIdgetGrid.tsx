@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useWallpaper } from "../wallpaper/WallpaperContext";
 import { Widget } from "./Widget";
 import { useGridLayout, useGridLayoutDispatch } from "./GridLayoutContext";
+import { OverlayTrigger, Popover } from "react-bootstrap";
+import { WidgetSettings } from "../settings/WidgetSettings";
 
 const cartesian = (...a) =>
   a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())));
@@ -17,14 +19,31 @@ const widgetClass = (isLocked, currentWidget, selectedWidget) => {
   }
 };
 
+const cellLocationToPopoverPlacement = (cellLocation) => {
+  const [x, y] = cellLocation;
+  if (y === 1 && x === 1) {
+    return "left";
+  } else if (y === 0) return "bottom";
+  else if (y === 2) return "top";
+  return "auto";
+};
+
+const popover = (selectedWidget) => (
+  <Popover id="popover-basic">
+    <Popover.Body>
+      <WidgetSettings selectedWidget={selectedWidget} />
+    </Popover.Body>
+  </Popover>
+);
+
 export function WidgetGrid({
   tick,
   unlocked,
   droppingWidgetData,
   setDroppingWidgetData,
   selectedWidget,
-  setSettingsTab,
   setSelectedWidget,
+  settingsOpen,
 }) {
   const { widgets, cells } = useGridLayout();
   const dispatch = useGridLayoutDispatch();
@@ -34,8 +53,20 @@ export function WidgetGrid({
   const widgetCells = grid.map(([y, x]) => {
     const widgetsForCell = widgets
       .filter((w) => w.layout.x === x && w.layout.y === y)
-      .sort((a, b) => a.lastMovedAt - b.lastMovedAt)
-      .map((widget) => (
+      .sort((a, b) => a.lastMovedAt - b.lastMovedAt);
+
+    const maxFontSize = Math.max(
+      ...widgetsForCell.map((widget) => widget.fontSize)
+    );
+
+    const renderedWidgetsForCell = widgetsForCell.map((widget) => (
+      <OverlayTrigger
+        trigger="click"
+        overlay={popover(selectedWidget)}
+        placement={cellLocationToPopoverPlacement([x, y])}
+        show={widget.id === selectedWidget && settingsOpen}
+        transition={false}
+      >
         <div
           draggable={unlocked}
           onDragStart={() => {
@@ -48,12 +79,12 @@ export function WidgetGrid({
           className={widgetClass(!unlocked, widget.id, selectedWidget)}
           onClick={() => {
             setSelectedWidget(widget.id);
-            setSettingsTab("settings");
           }}
         >
           <Widget tick={tick} unlocked={unlocked} widget={widget} />
         </div>
-      ));
+      </OverlayTrigger>
+    ));
     const cellId = `${x}-${y}`;
     const widgetCellId = `widget-cell-${cellId}`;
 
@@ -72,11 +103,14 @@ export function WidgetGrid({
         } ${dragHoverXY ? "widget-cell-drag-happening-somewhere" : ""}`}
       >
         <div
+          style={{
+            fontSize: maxFontSize * 2,
+          }}
           className={`widget-cell-inner ${
             cells[cellId] ? `widget-cell-border-${cells[cellId].border}` : ""
           } ${stackingClass(cells, cellId)}`}
         >
-          {widgetsForCell}
+          {renderedWidgetsForCell}
         </div>
       </div>
     );
@@ -88,6 +122,9 @@ export function WidgetGrid({
       style={{
         fontFamily: font,
       }}
+      onClick={(e) => {
+        if (e.target.id.startsWith("widget-cell-")) setSelectedWidget(null);
+      }}
       onDragOver={(e) => {
         e.preventDefault();
         setDragHoverXY({
@@ -97,7 +134,6 @@ export function WidgetGrid({
       }}
       onDrop={(e) => {
         const id = new Date().getTime().toString();
-
         const { dropType, widget: droppedWidget } = droppingWidgetData;
 
         if (dropType === "ADD_WIDGET") {

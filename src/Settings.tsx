@@ -5,16 +5,9 @@ import Draggable from "react-draggable";
 import { WidgetPicker } from "./settings/WidgetPicker";
 import { WallpaperPicker } from "./settings/WallpaperPicker";
 import { Button } from "react-bootstrap";
-import { WidgetSettings } from "./settings/WidgetSettings";
+import { About } from "./settings/About";
 
-export const Settings = ({
-  setDroppingWidgetData,
-  selectedWidget,
-  setSelectedWidget,
-  setSettingsOpen,
-  settingsTab,
-  setSettingsTab,
-}) => {
+export const Settings = ({ setDroppingWidgetData, setSettingsOpen }) => {
   return (
     <Draggable handle=".settings-header">
       <div className="settings">
@@ -32,25 +25,15 @@ export const Settings = ({
         </div>
         <hr className="divider" />
         <div className="settings-content ">
-          <Tabs
-            defaultActiveKey="wallpaper"
-            activeKey={settingsTab}
-            className="mb-3"
-            onSelect={(k) => {
-              setSettingsTab(k);
-              if (k !== "settings") {
-                setSelectedWidget(null);
-              }
-            }}
-          >
+          <Tabs defaultActiveKey="background" className="mb-3">
+            <Tab eventKey="background" title="Background">
+              <WallpaperPicker />
+            </Tab>
             <Tab eventKey="widgets" title="Widgets">
               <WidgetPicker setDroppingWidgetData={setDroppingWidgetData} />
             </Tab>
-            <Tab eventKey="settings" title="Settings">
-              <WidgetSettings selectedWidget={selectedWidget} />
-            </Tab>
-            <Tab eventKey="background" title="Background">
-              <WallpaperPicker />
+            <Tab eventKey="about" title="About">
+              <About/>
             </Tab>
           </Tabs>
         </div>

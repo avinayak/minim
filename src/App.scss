@@ -41,7 +41,7 @@ body {
   justify-content: space-between;
   align-items: center;
   bottom: 0;
-  opacity: 0.1;
+  opacity: 0.3;
   background: linear-gradient(
     180deg,
     transparent 0,
@@ -79,15 +79,6 @@ body {
   }
 
   .bottom-right {
-    .icon-button {
-      background: none;
-      color: inherit;
-      border: none;
-      font: inherit;
-      cursor: pointer;
-      outline: inherit;
-      padding: 0px 14px;
-    }
     padding: 18px 20px;
     display: flex;
   }
@@ -175,12 +166,29 @@ body {
   cursor: move;
 }
 
-.droppable-widget-placeholder {
-  cursor: grabbing;
-}
-
 .widgets-add {
   text-align: center;
+  .widget-picker-preview {
+    height: 135px;
+    display: flex;
+    cursor: grabbing;
+    align-items: center;
+    justify-content: space-around;
+    border: 4px dotted #eee;
+    margin: 12px 0px;
+    border-radius: 25px;
+    padding: 4px;
+  }
+
+  .widget-picker-preview:hover {
+    background-color: #f9f9f9;
+  }
+
+  .widget-add-instructions {
+    padding: 14px 0px;
+    font-size: 14px;
+    color: #999;
+  }
 }
 
 #bottom-button-tooltip {
@@ -211,7 +219,7 @@ body {
   top: 0px;
   left: 0px;
   background-color: #000000;
-  z-index: 1;
+  z-index: 2;
   opacity: 0.5;
 }
 
@@ -228,9 +236,30 @@ body {
     transparent 5%,
     rgba(0, 0, 0, 1)
   );
+  z-index: 2;
+}
+.dots {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0px;
+  left: 0px;
   z-index: 1;
+
+  background: transparent;
+  background-image: radial-gradient(
+    hsla(0, 0%, 100%, 0.3411764705882353),
+    1px,
+    transparent 0
+  );
+  background-size: 30px 30px;
+
+  transition: opacity 0.5s ease-in-out;
 }
 
+.wallpaper-container {
+  transition: filter 0.5s ease-in-out;
+}
 .widget {
   user-select: none;
   padding: 10px;
@@ -287,19 +316,19 @@ body {
     color: #ffffff;
   }
 
-  .widget-cell-stacking-horizontal-0{
+  .widget-cell-stacking-horizontal-0 {
     flex-direction: row;
     display: flex;
     align-items: flex-start;
   }
 
-  .widget-cell-stacking-horizontal-1{
+  .widget-cell-stacking-horizontal-1 {
     flex-direction: row;
     display: flex;
     align-items: center;
   }
 
-  .widget-cell-stacking-horizontal-2{
+  .widget-cell-stacking-horizontal-2 {
     flex-direction: row;
     display: flex;
     align-items: flex-end;
@@ -363,6 +392,37 @@ body {
     background: rgba(255, 255, 255, 0.336);
   }
   .widget-cell-drag-happening-somewhere {
-    border: 1px white;
+    border: 1px rgba(255, 255, 255, 0.192) solid;
   }
 }
+
+.about-page {
+  text-align: center;
+  .version-string {
+    font-size: 10px;
+  }
+}
+
+.kofi-button {
+  width: 50%;
+}
+
+.white {
+  color: rgb(0 0 0/2%);
+}
+
+.icon-button {
+  background: none;
+  color: inherit;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  padding: 0px 14px;
+}
+
+.background-toggles {
+  text-align: center;
+  padding-top: 20px;
+}
+

@@ -9,7 +9,6 @@ import { Settings } from "./Settings";
 import { WallpaperSurface } from "./wallpaper/WallpaperSurface";
 import { WidgetProvider } from "./widgets/GridLayoutContext";
 import { CategoryTypes, SourceTypes } from "./gql/graphql";
-
 import { mdiCog, mdiFire, mdiShimmer } from "@mdi/js";
 import { BottomBarButton } from "./components/BottomBarButton";
 import { WallpaperInfoSpinner } from "./WallpaperInfoSpinner";
@@ -28,8 +27,9 @@ export function App() {
   const [droppingWidgetData, setDroppingWidgetData] = useState<string | null>(
     null
   );
-  const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
-  const [settingsTab, setSettingsTab] = useState<string>("widgets");
+  const [selectedWidget, setSelectedWidget] = useState<string | null>(
+    "1680393526778"
+  );
 
   return (
     <div className="App">
@@ -39,11 +39,7 @@ export function App() {
             {settingsOpen && (
               <Settings
                 setDroppingWidgetData={setDroppingWidgetData}
-                selectedWidget={selectedWidget}
                 setSettingsOpen={setSettingsOpen}
-                settingsTab={settingsTab}
-                setSettingsTab={setSettingsTab}
-                setSelectedWidget={setSelectedWidget}
               />
             )}
 
@@ -53,8 +49,8 @@ export function App() {
               unlocked={settingsOpen}
               droppingWidgetData={droppingWidgetData}
               selectedWidget={selectedWidget}
-              setSettingsTab={setSettingsTab}
               setSelectedWidget={setSelectedWidget}
+              settingsOpen={settingsOpen}
             />
             <div className="bottom">
               <div className="bottom-left">
@@ -95,8 +91,8 @@ export const SettingsButton = ({
 
 export const RefreshWallpaperButton = () => {
   const trigger = useWallpaperFetcher();
-  const { fetchStarted, wallpaperCategory } = useWallpaper();
-  return (
+  const { fetchStarted, wallpaperCategory, wallpaperType } = useWallpaper();
+  return wallpaperType === "photography" ? (
     <BottomBarButton
       disabled={fetchStarted}
       onClick={() => {
@@ -109,7 +105,7 @@ export const RefreshWallpaperButton = () => {
       tooltip="Refresh Wallpaper"
       icon={mdiShimmer}
     />
-  );
+  ) : null;
 };
 
 export const ResetAppButton = () => {

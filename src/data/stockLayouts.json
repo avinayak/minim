@@ -13,14 +13,13 @@
         "seperator": ":",
         "timeFormat": "hh:mm A",
         "id": "1680393526778",
-        "layout": { "x": 2, "y": 2 },
+        "layout": { "x": 0, "y": 2 },
         "lastMovedAt": 1680401262517
       },
       {
         "widgetCode": "clock",
         "subText": "",
         "fontSize": 9,
-
         "clockTimeZone": "",
         "seperator": ":",
         "timeFormat": "hh:mm A",
