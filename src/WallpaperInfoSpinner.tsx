@@ -76,7 +76,7 @@ export function WallpaperInfoSpinner({}) {
           overlay={popover(meta)}
         >
           <span>
-            <Link href={`${meta.link}?utm_source=minim&utm_medium=referral`}>Image</Link>
+            <Link href={`${meta.link}?utm_source=minim&utm_medium=referral`}>Photo</Link>
             {" by "}
             <Link href={`${meta.userLink}?utm_source=minim&utm_medium=referral`}>{meta.fullName}</Link>
             {locationString(meta.location) &&
