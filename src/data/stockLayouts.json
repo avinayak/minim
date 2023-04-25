@@ -19,7 +19,7 @@
       {
         "widgetCode": "clock",
         "subText": "",
-        "fontSize": 9,
+        "fontSize": 7,
         "clockTimeZone": "",
         "seperator": ":",
         "timeFormat": "hh:mm A",
