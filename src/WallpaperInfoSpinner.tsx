@@ -20,10 +20,16 @@ const popover = (meta) => {
   return (
     <Popover className="wallpaper-metadata">
       <Popover.Body>
-        {description ? description + ": " + altDescription : altDescription}
+        {description ? description + ": " + altDescription : altDescription}.
         <br />
-        <small>
-          <div>by @{username} on Unsplash</div>
+        <small
+          style={{
+            textAlign: "right",
+            display: "block",
+            marginTop: "0.5rem",
+          }}
+        >
+          <div>- by @{username} on Unsplash</div>
         </small>
 
         {location && (location.city || location.country) && (

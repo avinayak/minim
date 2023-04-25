@@ -30,15 +30,15 @@ export const weatherWidget: WidgetType = {
     fontSize: 4,
     borderStyle: "none",
     temperature: 293,
-    weatherCondition: "Snowy",
+    weatherCondition: "Clear Sky",
     tempraureUnit: "C",
-    subText: "Vancouver",
+    subText: "Fairbanks",
     display: "temperature_and_condition",
     city: {
-      name: "Vancouver",
-      country: "Canada",
-      lat: 49.2827,
-      lon: -123.1207,
+      country: "United States",
+      name: "Fairbanks",
+      lat: 64.83778,
+      lon: -147.71639,
     },
   }),
   settingsForm: (widget) => {
@@ -173,7 +173,7 @@ export const weatherWidget: WidgetType = {
   },
   preview: (widget) => (
     <div>
-      <div style={{ fontSize: "25px" }}>9° Snow</div>
+      <div style={{ fontSize: "25px" }}>9° Clear Sky</div>
     </div>
   ),
 };
