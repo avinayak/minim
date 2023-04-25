@@ -164,6 +164,9 @@ export function useWallpaperFetcher() {
               altDescription: randomImage.altDescription,
               username: randomImage.user?.username,
               color: randomImage.color,
+              exif: randomImage.exif,
+              location: randomImage.location,
+              userLink: randomImage.user?.links?.html,
             }
           : undefined;
 

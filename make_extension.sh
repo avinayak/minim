@@ -93,4 +93,4 @@ zip -r $new_version_package_name $TEMP_DIR
 # Update the version in the JSON file and save it
 jq ".version = \"$new_version\"" "$JSON_FILE" > tmp.json && mv tmp.json "$JSON_FILE"
 
-echo "Chrome extension created: $ZIP_FILE"
+echo "Chrome extension created: $new_version_package_name"

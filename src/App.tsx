@@ -43,7 +43,8 @@ export function App() {
               />
             )}
 
-            <WidgetGrid
+           <div className="main-surface">
+             <WidgetGrid
               tick={tick}
               setDroppingWidgetData={setDroppingWidgetData}
               unlocked={settingsOpen}
@@ -65,6 +66,7 @@ export function App() {
                 <ResetAppButton />
               </div>
             </div>
+           </div>
             <WallpaperSurface tick={tick} />
           </WidgetProvider>
         </WallpaperProvider>

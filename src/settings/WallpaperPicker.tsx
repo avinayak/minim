@@ -43,39 +43,41 @@ export const WallpaperPicker = () => {
         }}
       />
 
-      <LabelledSelector
-        label="Change every"
-        value={wallpaperState.changeEvery}
-        options={[
-          { label: "Never", value: "never" },
-          { label: "Minute", value: "1_minute" },
-          { label: "5 Minutes", value: "5_minutes" },
-          { label: "15 Minutes", value: "15_minutes" },
-          { label: "Hour", value: "hour" },
-          { label: "Day", value: "day" },
-          { label: "New Tab", value: "new_tab" },
-        ]}
-        onChange={(changeEvery) => {
-          if (changeEvery === "new_tab") {
-            sessionStorage.setItem("new_tab", "ok");
-          } else if (changeEvery !== "never") {
-            localStorage.setItem(
-              "nextWallpaperChangeAt",
-              (
-                new Date().getTime() + intervalToMicroseconds[changeEvery]
-              ).toString()
-            );
-          }
+      {wallpaperState.wallpaperType === "photography" && (
+        <LabelledSelector
+          label="Change every"
+          value={wallpaperState.changeEvery}
+          options={[
+            { label: "Never", value: "never" },
+            { label: "Minute", value: "1_minute" },
+            { label: "5 Minutes", value: "5_minutes" },
+            { label: "15 Minutes", value: "15_minutes" },
+            { label: "Hour", value: "hour" },
+            { label: "Day", value: "day" },
+            { label: "New Tab", value: "new_tab" },
+          ]}
+          onChange={(changeEvery) => {
+            if (changeEvery === "new_tab") {
+              sessionStorage.setItem("new_tab", "ok");
+            } else if (changeEvery !== "never") {
+              localStorage.setItem(
+                "nextWallpaperChangeAt",
+                (
+                  new Date().getTime() + intervalToMicroseconds[changeEvery]
+                ).toString()
+              );
+            }
 
-          wallpaperDispatch({
-            type: "UPDATE_WALLPAPER",
-            payload: {
-              ...wallpaperState,
-              changeEvery,
-            },
-          });
-        }}
-      />
+            wallpaperDispatch({
+              type: "UPDATE_WALLPAPER",
+              payload: {
+                ...wallpaperState,
+                changeEvery,
+              },
+            });
+          }}
+        />
+      )}
 
       {walppaperPicker.picker()}
 
@@ -110,8 +112,7 @@ export const WallpaperPicker = () => {
         }}
         currentValue={wallpaperState.shade}
       />
-  <BackgroundToggles/>
-      
+      <BackgroundToggles />
     </>
   );
 };

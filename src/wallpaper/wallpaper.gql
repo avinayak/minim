@@ -19,6 +19,22 @@ query randomImageQuery(
       firstName
       lastName
       username
+      links {
+        html
+      }
+    }
+    exif {
+      make
+      model
+      exposureTime
+      aperture
+      focalLength
+      iso
+    }
+    location {
+      city
+      country
+      name
     }
   }
 }

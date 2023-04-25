@@ -5,7 +5,8 @@ import {
 } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://m3-backend.fly.dev/api/graphql",
+  // uri: "https://m3-backend.fly.dev/api/graphql",
+  uri: "http://localhost:4000/api/graphql",
   cache: new InMemoryCache(),
 });
 

@@ -21,7 +21,8 @@ export const WallpaperSurface = ({ tick }: {}) => {
   useEffect(() => {
     if (
       wallpaper.changeEvery === "never" ||
-      wallpaper.changeEvery === "new_tab"
+      wallpaper.changeEvery === "new_tab" ||
+      wallpaper.type !== "photography"
     )
       return;
 
