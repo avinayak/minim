@@ -1,69 +1,57 @@
-# name: Build and Deploy
+name: Build and Release
 
-# on:
-#   push:
-#     branches:
-#       - master
+on:
+  workflow_dispatch:
 
-# jobs:
-#   build_and_deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v2
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-#     - name: Setup Node.js
-#       uses: actions/setup-node@v2
-#       with:
-#         node-version: 14
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
 
-#     - name: Install dependencies
-#       run: yarn install
+    - name: Install dependencies
+      run: yarn install
 
-#     - name: Build project
-#       run: yarn build:ext
+    - name: Build extension
+      run: yarn build:ext
 
-#     - name: find zipfile name
-#       run: |
-#         echo "ZIPFILE_NAME=$(ls *.zip)" >> $GITHUB_ENV
+    - name: Find zip file
+      id: findzip
+      run: |
+        ZIP_FILE=$(ls *.zip | head -n 1)
+        echo "ZIP_FILE=$ZIP_FILE" >> $GITHUB_ENV
+        echo "::set-output name=zip_file::$ZIP_FILE"
 
-#     - name: fetch version
-#       run: |
-#         echo "VERSION=$(jq -r .version src/version.json)" >> $GITHUB_ENV
+    - name: Create GitHub release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.sha }}
+        release_name: Release ${{ github.sha }}
 
-#     - name: Create Release
-#       id: create_release
-#       uses: actions/create-release@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       with:
-#         tag_name: ${{ github.ref }}
-#         release_name: v${{ env.VERSION }}
-#         body: Auto-generated release
-#         draft: false
-#         prerelease: false
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./${{ steps.findzip.outputs.zip_file }}
+        asset_name: ${{ steps.findzip.outputs.zip_file }}
+        asset_content_type: application/zip
 
-#     - name: Upload Release Asset
-#       uses: actions/upload-release-asset@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       with:
-#         upload_url: ${{ steps.create_release.outputs.upload_url }}
-#         asset_path: ${{ env.ZIPFILE_NAME }}
-#         asset_name: ${{ env.ZIPFILE_NAME }}
-#         asset_content_type: application/zip
-
-#     - name: Commit zip file to repository
-#       run: |
-#         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-#         git config --global user.name "GitHub Actions"
-#         git add *
-#         git commit -m "auto: Update Release file"
-#         git push
-
-#     - name: Deploy to GitHub Pages
-#       uses: peaceiris/actions-gh-pages@v3
-#       with:
-#         github_token: ${{ secrets.GITHUB_TOKEN }}
-#         publish_dir: ./dist
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Add new release and update ${ZIP_FILE}" || true
+        git push
