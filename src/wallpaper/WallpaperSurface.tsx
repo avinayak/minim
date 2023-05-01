@@ -2,15 +2,24 @@ import { useEffect } from "react";
 import { intervalToMicroseconds } from "../data/intervals";
 import { CategoryTypes, SourceTypes } from "../gql/graphql";
 import { pick } from "../utils";
-import { useWallpaper, useWallpaperFetcher } from "./WallpaperContext";
+import {
+  refreshWallpaperfromStore,
+  useWallpaper,
+  useWallpaperDispatch,
+  useWallpaperFetcher,
+} from "./WallpaperContext";
 
 export const WallpaperSurface = ({ tick }: {}) => {
   const trigger = useWallpaperFetcher();
+  const triggerNoRefresh = useWallpaperFetcher(true);
   const wallpaper = useWallpaper();
+
+  const wallpaperDispatch = useWallpaperDispatch();
 
   useEffect(() => {
     if (wallpaper.changeEvery === "new_tab") {
-      trigger({
+      refreshWallpaperfromStore(wallpaper, wallpaperDispatch);
+      triggerNoRefresh({
         source: SourceTypes.Unsplash,
         query: wallpaper.wallpaperCategory,
         category: CategoryTypes.Collection,
@@ -19,11 +28,7 @@ export const WallpaperSurface = ({ tick }: {}) => {
   }, []);
 
   useEffect(() => {
-    if (
-      wallpaper.changeEvery === "never" ||
-      wallpaper.changeEvery === "new_tab" ||
-      wallpaper.type !== "photography"
-    )
+    if (wallpaper.changeEvery === "never" || wallpaper.type !== "photography")
       return;
 
     const nextWallpaperChangeAt = parseInt(
@@ -64,9 +69,10 @@ export const WallpaperSurface = ({ tick }: {}) => {
         }}
         className="tint"
       ></div>
-      <div className="dots"
+      <div
+        className="dots"
         style={{
-          opacity: wallpaper.texture? 1 : 0,
+          opacity: wallpaper.texture ? 1 : 0,
         }}
       ></div>
       <div

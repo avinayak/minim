@@ -48,7 +48,7 @@ async function saveImage(
   await new Promise<void>((resolve, reject) => {
     getAllRequest.onsuccess = (event: Event) => {
       const images = (event.target as IDBRequest<[ImageEntry]>).result;
-      if (images.length >= 3) {
+      if (images.length >= 1) {
         const deleteRequest = imageStore.delete(images[0].id);
         deleteRequest.onsuccess = () => {};
         deleteRequest.onerror = (error: Event) => {

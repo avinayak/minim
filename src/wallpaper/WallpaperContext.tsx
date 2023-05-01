@@ -135,7 +135,7 @@ export function useSilentWallpaperFetcher() {
   return fetchRandomImage;
 }
 
-export function useWallpaperFetcher() {
+export function useWallpaperFetcher(noRefresh = false) {
   const wallpaperDispatch = useWallpaperDispatch();
   const wallpaperState = useWallpaper();
   const [getRandomImage] = useLazyQuery(RandomImageQueryDocument, {
@@ -170,18 +170,22 @@ export function useWallpaperFetcher() {
             }
           : undefined;
 
-      fetchLatestImage().then((result) => {
-        wallpaperDispatch({
-          type: "UPDATE_WALLPAPER",
-          payload: {
-            ...wallpaperState,
-            meta,
-            background: `url('${result}')`,
-            color: "white",
-            fetchStarted: false,
-          },
-        });
-      });
+      fetchLatestImage().then(
+        noRefresh
+          ? () => {}
+          : (result) => {
+              wallpaperDispatch({
+                type: "UPDATE_WALLPAPER",
+                payload: {
+                  ...wallpaperState,
+                  meta,
+                  background: `url('${result}')`,
+                  color: "white",
+                  fetchStarted: false,
+                },
+              });
+            }
+      );
     },
   });
 
@@ -204,4 +208,18 @@ export function useWallpaperFetcher() {
   );
 
   return fetchRandomImage;
+}
+
+export function refreshWallpaperfromStore(wallpaper, wallpaperDispatch) {
+  fetchLatestImage().then((result) => {
+    wallpaperDispatch({
+      type: "UPDATE_WALLPAPER",
+      payload: {
+        ...wallpaper,
+        background: `url('${result}')`,
+        color: "white",
+        fetchStarted: false,
+      },
+    });
+  });
 }
