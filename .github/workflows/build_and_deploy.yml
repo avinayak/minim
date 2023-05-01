@@ -61,4 +61,4 @@ jobs:
         git config --local user.name "GitHub Action"
         git add .
         git commit -m "Add new release (v${VERSION}) and update ${ZIP_FILE}" || true
-        git push
+        git push origin HEAD:refs/heads/main
