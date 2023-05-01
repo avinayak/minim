@@ -61,8 +61,4 @@ jobs:
         git config --local user.name "GitHub Action"
         git add src/version.json ${{ steps.findzip.outputs.zip_file }}
         git commit -m "Add new release (v${VERSION}) and update ${ZIP_FILE}" || true
-        git fetch origin
-        git stash
-        git pull --rebase origin main
-        git stash apply
         git push origin main

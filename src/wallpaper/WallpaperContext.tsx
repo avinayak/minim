@@ -141,14 +141,6 @@ export function useWallpaperFetcher(noRefresh = false) {
   const [getRandomImage] = useLazyQuery(RandomImageQueryDocument, {
     onCompleted: async (response) => {
       const randomImage = response.randomImage;
-
-      randomImage &&
-        randomImage.urls?.full &&
-        (await storeImage(
-          addUnsplashScalingParams(randomImage.urls.full),
-          randomImage
-        ));
-
       const meta =
         randomImage && randomImage.links
           ? {
@@ -169,17 +161,23 @@ export function useWallpaperFetcher(noRefresh = false) {
               userLink: randomImage.user?.links?.html,
             }
           : undefined;
+      randomImage &&
+        randomImage.urls?.full &&
+        (await storeImage(
+          addUnsplashScalingParams(randomImage.urls.full),
+          meta
+        ));
 
       fetchLatestImage().then(
         noRefresh
           ? () => {}
-          : (result) => {
+          : ({ wallpaper_url, meta: metadata }) => {
               wallpaperDispatch({
                 type: "UPDATE_WALLPAPER",
                 payload: {
                   ...wallpaperState,
-                  meta,
-                  background: `url('${result}')`,
+                  meta: metadata,
+                  background: `url('${wallpaper_url}')`,
                   color: "white",
                   fetchStarted: false,
                 },
@@ -211,12 +209,13 @@ export function useWallpaperFetcher(noRefresh = false) {
 }
 
 export function refreshWallpaperfromStore(wallpaper, wallpaperDispatch) {
-  fetchLatestImage().then((result) => {
+  fetchLatestImage().then(({ wallpaper_url, meta }) => {
     wallpaperDispatch({
       type: "UPDATE_WALLPAPER",
       payload: {
         ...wallpaper,
-        background: `url('${result}')`,
+        meta,
+        background: `url('${wallpaper_url}')`,
         color: "white",
         fetchStarted: false,
       },
