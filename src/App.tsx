@@ -63,7 +63,6 @@ export function App() {
                   settingsOpen={settingsOpen}
                 />
                 <RefreshWallpaperButton />
-                <ResetAppButton />
               </div>
             </div>
            </div>
