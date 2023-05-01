@@ -29,10 +29,6 @@ cat > $MANIFEST_FILE <<- EOM
       "128": "icon128.png"
     }
   },
-  "host_permissions": [
-    "https://extension.ninja/*"
-],
-  "permissions": ["chrome://newtab/"],
   "chrome_url_overrides": {
     "newtab": "index.html"
   },

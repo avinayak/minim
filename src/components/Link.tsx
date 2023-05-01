@@ -1,4 +1,10 @@
-export function Link({ href, children }) {
+export function Link({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <span
       className="link"

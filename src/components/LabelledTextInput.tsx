@@ -1,8 +1,17 @@
 import { Form } from "react-bootstrap";
 
-export function LabelledTextInput({ label, helpText, onChange, lines, ...props }) {
-
-
+export function LabelledTextInput({
+  label,
+  helpText,
+  onChange,
+  lines,
+  ...props
+}: {
+  label: string;
+  helpText?: string;
+  onChange: (value: string) => void;
+  lines?: number;
+}) {
   const textInput = lines ? (
     <Form.Control
       as="textarea"
@@ -14,7 +23,6 @@ export function LabelledTextInput({ label, helpText, onChange, lines, ...props }
     />
   ) : (
     <Form.Control
-
       type="text"
       onChange={(e) => {
         onChange(e.target.value);

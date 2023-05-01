@@ -1,38 +1,38 @@
 import { useLazyQuery } from "@apollo/client";
 import { Form } from "react-bootstrap";
 import AsyncSelect from "react-select/async";
-import { CitySearchDocument } from "../gql/graphql";
+import { City, CitySearchDocument } from "../gql/graphql";
 
 const customStyles = {
-  option: (provided, state) => ({
+  option: (provided: { [x: string]: string }) => ({
     ...provided,
     padding: "0px 24px",
   }),
-  control: (provided, state) => ({
+  control: (provided: { [x: string]: string }) => ({
     ...provided,
     background: "#f7f7f9",
     borderRadius: 0,
     border: "none",
     padding: "4px 0px 4px 17px",
   }),
-  menu: (provided) => ({
+  menu: (provided: { [x: string]: string }) => ({
     ...provided,
     border: "1px solid",
     borderRadius: 0,
   }),
-  dropdownIndicator: (provided, state) => ({
+  dropdownIndicator: (provided: { [x: string]: string }) => ({
     ...provided,
     color: "#55595c",
     width: "31px",
     marginRight: "-6px",
   }),
 
-  clearIndicator: (provided, state) => ({
+  clearIndicator: (provided: { [x: string]: string }) => ({
     ...provided,
     display: "none",
   }),
 
-  indicatorSeparator: (provided, state) => ({
+  indicatorSeparator: (provided: { [x: string]: string }) => ({
     ...provided,
     display: "none",
   }),
@@ -46,18 +46,29 @@ const cityToOption = (city) => {
   };
 };
 
-export function LocationSelector({ onChange, city, label }) {
+export function LocationSelector({
+  onChange,
+  city,
+  label,
+}: {
+  onChange: (value: string) => void;
+  city: City;
+  label: string;
+}) {
   const [queryCitySearch] = useLazyQuery(CitySearchDocument, {});
+  const loadOptions = (
+    inputValue: string,
 
-  const loadOptions = (inputValue, callback) => {
+    callback: (options: { label: string; value: string }[]) => void
+  ) => {
     if (inputValue.length > 1) {
       queryCitySearch({
         variables: {
           query: inputValue,
         },
         onCompleted: (data) => {
-          const options = data.citySearch.map((city) => {
-            const label = ` ${city.name}, ${city.country}`;
+          const options = data?.citySearch?.map((city) => {
+            const label = `${city && city.name}, ${city && city.country}`;
             return {
               label,
               value: JSON.stringify(city),
@@ -83,13 +94,13 @@ export function LocationSelector({ onChange, city, label }) {
     <div>
       <Form.Label>{label}</Form.Label>
       <AsyncSelect
-      cacheOptions
-      loadOptions={loadOptions}
-      defaultOptions
-      value={cityToOption(city)}
-      onChange={handleInputChange}
-      styles={customStyles}
-    />
+        cacheOptions
+        loadOptions={loadOptions}
+        defaultOptions
+        value={cityToOption(city)}
+        onChange={handleInputChange}
+        styles={customStyles}
+      />
     </div>
   );
 }

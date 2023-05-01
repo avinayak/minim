@@ -1,8 +1,17 @@
-import {Icon} from "@mdi/react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Icon } from "@mdi/react";
+import { OverlayTrigger, Tooltip, TooltipProps } from "react-bootstrap";
 
-export function IconButton({ icon, tooltip,on, ...props }) {
-  const renderTooltip = (props) => (
+export function IconButton({
+  icon,
+  tooltip,
+  on,
+  ...props
+}: {
+  icon: string;
+  tooltip: string;
+  on: boolean;
+}) {
+  const renderTooltip = (props: TooltipProps) => (
     <Tooltip id="bottom-button-tooltip" {...props}>
       {tooltip}
     </Tooltip>
@@ -15,9 +24,7 @@ export function IconButton({ icon, tooltip,on, ...props }) {
       overlay={renderTooltip}
     >
       <button className="icon-button" {...props}>
-        <Icon path={icon} size={1.2} color={
-          on? 'black': '#ccc'
-        } />
+        <Icon path={icon} size={1.2} color={on ? "black" : "#ccc"} />
       </button>
     </OverlayTrigger>
   );
