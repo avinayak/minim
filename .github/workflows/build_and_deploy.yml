@@ -22,6 +22,13 @@ jobs:
     - name: Build extension
       run: yarn build:ext
 
+    - name: Get version from version.json
+      id: version
+      run: |
+        VERSION=$(jq -r '.version' src/version.json)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "::set-output name=version::$VERSION"
+
     - name: Find zip file
       id: findzip
       run: |
@@ -35,8 +42,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.sha }}
-        release_name: Release ${{ github.sha }}
+        tag_name: v${{ steps.version.outputs.version }}
+        release_name: Release v${{ steps.version.outputs.version }}
 
     - name: Upload release asset
       uses: actions/upload-release-asset@v1
@@ -53,5 +60,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git commit -m "Add new release and update ${ZIP_FILE}" || true
+        git commit -m "Add new release (v${VERSION}) and update ${ZIP_FILE}" || true
         git push
