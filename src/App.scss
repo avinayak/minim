@@ -282,7 +282,9 @@ body {
   flex-direction: column;
   justify-content: space-between;
   .bottom {
+    position: fixed;
     padding: 0px 14px;
+    bottom: 0px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -343,7 +345,7 @@ body {
     grid-row-gap: 0px;
 
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 50px);
 
     padding: 0px 28px;
 

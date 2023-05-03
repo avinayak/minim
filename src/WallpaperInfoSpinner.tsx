@@ -77,7 +77,7 @@ export function WallpaperInfoSpinner({}) {
     <span className="spinner wallpaper-info">
       {meta && (
         <OverlayTrigger
-          trigger={["hover"]}
+          trigger={["hover", "focus"]}
           placement="top"
           overlay={popover(meta)}
         >

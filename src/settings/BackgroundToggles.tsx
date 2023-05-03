@@ -1,4 +1,4 @@
-import { mdiDotsGrid, mdiImageFilterBlackWhite } from "@mdi/js";
+import { mdiBlur, mdiSquareOpacity } from "@mdi/js";
 import { IconButton } from "../components/IconButton";
 import {
   useWallpaper,
@@ -12,7 +12,7 @@ export function BackgroundToggles() {
   return (
     <div className="background-toggles">
       <IconButton
-        icon={mdiImageFilterBlackWhite}
+        icon={mdiSquareOpacity}
         tooltip="Grayscale"
         on={wallpaper.grayScale}
         onClick={() => {
@@ -26,7 +26,7 @@ export function BackgroundToggles() {
         }}
       />
       <IconButton
-        icon={mdiDotsGrid}
+        icon={mdiBlur}
         tooltip="Texture"
         on={wallpaper.texture}
         onClick={() => {

@@ -107,7 +107,6 @@ export async function fetchLatestImage(): Promise<string> {
       const images = (event.target as IDBRequest<[ImageEntry]>).result;
       if (images.length > 0) {
         blobToBase64(images[images.length - 1].image).then((base64) => {
-          console.log(images[images.length - 1])
           resolve({
             wallpaper_url: base64 as string,
             meta: images[images.length - 1].metadata,

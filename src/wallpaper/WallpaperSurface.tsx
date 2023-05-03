@@ -28,7 +28,10 @@ export const WallpaperSurface = ({ tick }: {}) => {
   }, []);
 
   useEffect(() => {
-    if (wallpaper.changeEvery === "never" || wallpaper.type !== "photography")
+    if (
+      wallpaper.changeEvery === "never" ||
+      wallpaper.wallpaperType !== "photography"
+    )
       return;
 
     const nextWallpaperChangeAt = parseInt(
