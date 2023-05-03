@@ -58,6 +58,9 @@ export const WallpaperSurface = ({ tick }: {}) => {
     "color",
   ]);
 
+  document.body.style.backgroundImage = `${wallpaper.backgroundImage} !important`;
+  document.body.style.background = `${wallpaper.background} !important`;
+
   return (
     <div>
       <div

@@ -10,6 +10,7 @@ body {
   margin: 0;
   font-size: 0.875rem !important;
   overflow: hidden;
+  background: black !important;
 }
 
 @media (prefers-color-scheme: light) {
@@ -321,7 +322,7 @@ body {
       }
       .spinner-bar {
         margin-bottom: 3px;
-        margin-left: 7px;
+        margin-left: 14px;
       }
 
       .wallpaper-info {

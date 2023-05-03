@@ -20,11 +20,11 @@ const popover = (meta) => {
   return (
     <Popover className="wallpaper-metadata">
       <Popover.Body>
-        {description ? description + ": " + altDescription : altDescription}.
+        {description ? description + ": " + altDescription : altDescription}
         <br />
         <small
           style={{
-            textAlign: "right",
+            textAlign: "left",
             display: "block",
             marginTop: "0.5rem",
           }}
