@@ -72,19 +72,25 @@ const popover = (meta) => {
 };
 
 export function WallpaperInfoSpinner({}) {
-  const { fetchStarted, meta } = useWallpaper();
+  const { fetchStarted, meta, wallpaperType } = useWallpaper();
   return (
     <span className="spinner wallpaper-info">
-      {meta && (
+      {wallpaperType === `photography` && meta && (
         <OverlayTrigger
           trigger={["hover", "focus"]}
           placement="top"
           overlay={popover(meta)}
         >
           <span>
-            <Link href={`${meta.link}?utm_source=minim&utm_medium=referral`}>Photo</Link>
+            <Link href={`${meta.link}?utm_source=minim&utm_medium=referral`}>
+              Photo
+            </Link>
             {" by "}
-            <Link href={`${meta.userLink}?utm_source=minim&utm_medium=referral`}>{meta.fullName}</Link>
+            <Link
+              href={`${meta.userLink}?utm_source=minim&utm_medium=referral`}
+            >
+              {meta.fullName}
+            </Link>
             {locationString(meta.location) &&
               ` (${locationString(meta.location)})`}
           </span>
