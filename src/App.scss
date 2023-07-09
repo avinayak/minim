@@ -119,6 +119,10 @@ body {
 
 .widgets-add {
   text-align: center;
+  .widgets-add-container {
+    height: 451px;
+    overflow: auto;
+  }
   .widget-picker-preview {
     height: 135px;
     display: flex;
@@ -296,7 +300,7 @@ body {
       transparent 0,
       transparent 0,
       transparent 5%,
-      rgba(0, 0, 0, 0.38)
+      rgba(0, 0, 0, 0.78)
     );
     &:hover {
       opacity: 1;
@@ -362,11 +366,13 @@ body {
 
     .widget-cell-border-solid {
       border: 0.6em solid #ffffff;
+      padding: 0px 14px;
     }
 
     .widget-cell-border-circular {
       border: 0.6em solid #ffffff;
       border-radius: 30px;
+      padding: 0px 14px;
     }
 
     .widget-cell-border-card {
@@ -375,16 +381,19 @@ body {
       background-color: #ffffff;
       color: #000000;
       box-shadow: -9px 12px 20px 1px rgba(0, 0, 0, 0.3);
+      padding: 0px 14px;
     }
 
     .widget-cell-border-black-on-white {
       background: #ffffff;
       color: #000000;
+      padding: 0px 14px;
     }
 
     .widget-cell-border-white-on-black {
       background: #000000;
       color: #ffffff;
+      padding: 0px 14px;
     }
 
     .widget-cell-stacking-horizontal-0 {
@@ -466,4 +475,18 @@ body {
       border: 1px rgba(255, 255, 255, 0.192) dashed;
     }
   }
+}
+
+.datepicker {
+  padding: 13px;
+  background: #f7f7f9;
+  margin-bottom: 10px;
+}
+
+.react-datetime-picker__wrapper {
+  border: none !important;
+  color: #55595c !important;
+}
+.react-datetime-picker__inputGroup__input {
+  color: #55595c !important;
 }

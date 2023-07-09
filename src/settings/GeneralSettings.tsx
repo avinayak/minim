@@ -11,7 +11,7 @@ export function GeneralSettings({ widget }: { widget: WidgetPropertiesType }) {
     <div>
       <LabelledSlider
         label="Size"
-        min={2}
+        min={1}
         max={24}
         onChange={(widget_font_size) => {
           dispatch({

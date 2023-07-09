@@ -97,10 +97,16 @@ function wallpaperReducer(
       updatedWallpaperState = wallpaper;
       break;
   }
-  localStorage.setItem(
-    "wallpaper",
-    JSON.stringify(omit(updatedWallpaperState, ["fetchStarted"]))
-  );
+
+  try {
+    localStorage.setItem(
+      "wallpaper",
+      JSON.stringify(omit(updatedWallpaperState, ["fetchStarted"]))
+    );
+  } catch (e) {
+    console.log(e);
+  }
+
   return updatedWallpaperState;
 }
 

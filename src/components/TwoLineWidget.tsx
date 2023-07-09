@@ -11,7 +11,7 @@ export function TwoLineWidget({ text, subText, fontSize }: TwoLineWidgetProps) {
         style={{
           fontSize: fontSize / 1.4 + "rem",
           whiteSpace: "pre",
-          lineHeight: "120%",
+          lineHeight: "100%",
         }}
       >
         {text}

@@ -3,6 +3,7 @@ import { clockWidget } from "./clock";
 import { messageWidget } from "./message";
 import { weatherWidget } from "./weather";
 import { timeOfDayWish } from "./timeOfDayWish";
+import { timerWidget } from "./timer";
 
 import "rc-slider/assets/index.css";
 
@@ -10,7 +11,8 @@ export const widgetKeyMap: WidgetMapType = () =>( {
   clock: clockWidget,
   message: messageWidget,
   weather: weatherWidget,
-  wish: timeOfDayWish
+  wish: timeOfDayWish,
+  timer: timerWidget,
 });
 
 export const widgetKeys: WidgetCodeType[] = Object.keys(

@@ -41,7 +41,7 @@ export const FlatWallpaperPicker = {
 
         <LabelledSelector
           label="Color"
-          value={wallpaperState.wallpaperName}
+          value={wallpaperState.newWallpaper}
           options={categoryColors}
           onChange={(newWallpaper) => {
             const { b: newWallpaperBackground, f: newTextColor } =
@@ -52,6 +52,7 @@ export const FlatWallpaperPicker = {
               payload: {
                 ...wallpaperState,
                 background: newWallpaperBackground,
+                wallpaperName: newWallpaper,
                 color: newTextColor,
               },
             });

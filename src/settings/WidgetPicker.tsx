@@ -39,41 +39,41 @@ export const WidgetPicker = ({ setDroppingWidgetData }) => {
         <div className="widget-add-instructions">
           To add a widget, drag and drop it to the screen...
         </div>
-        <Container>
-          <Row>
-            {widgetKeys.map((key, index) => (
-              <Col md="6">
-                <div
-                  key={key}
-                  className="widget-picker-preview"
-                  draggable={true}
-                  unselectable="on"
-                  onDragStart={() => {
-                    setDroppingWidgetData({
-                      widget: {
-                        widgetCode: key,
-                      },
-                      dropType: "ADD_WIDGET",
-                    });
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        fontFamily: font,
-                      }}
-                    >
-                      {widgetKeyMap()[key].preview()}
+        <div className="widgets-add-container">
+          <Container>
+            <Row>
+              {widgetKeys.map((key, index) => (
+                <Col md="6">
+                  <div
+                    key={key}
+                    className="widget-picker-preview"
+                    draggable={true}
+                    unselectable="on"
+                    onDragStart={() => {
+                      setDroppingWidgetData({
+                        widget: {
+                          widgetCode: key,
+                        },
+                        dropType: "ADD_WIDGET",
+                      });
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          fontFamily: font,
+                        }}
+                      >
+                        {widgetKeyMap()[key].preview()}
+                      </div>
                     </div>
-                    
                   </div>
-                  
-                </div>
-                {widgetKeyMap()[key].widgetName}
-              </Col>
-            ))}
-          </Row>
-        </Container>
+                  {widgetKeyMap()[key].widgetName}
+                </Col>
+              ))}
+            </Row>
+          </Container>
+        </div>
       </div>
     </div>
   );

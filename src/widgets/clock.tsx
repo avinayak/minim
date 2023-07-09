@@ -5,16 +5,25 @@ import { Col, Container, Row } from "react-bootstrap";
 import { LabelledTextInput } from "../components/LabelledTextInput";
 import { TwoLineWidget } from "../components/TwoLineWidget";
 
-function extractTimeZoneName(tz: string) {
-  return tz.replace(/_/g, " ").split("/").pop();
+function convertTo24(hour, period) {
+  if (period.toUpperCase() === "AM" && hour === 12) {
+    return 0;
+  } else if (period.toUpperCase() === "AM") {
+    return hour;
+  } else if (period.toUpperCase() === "PM" && hour === 12) {
+    return 12;
+  } else {
+    return hour + 12;
+  }
 }
 
 function printTime(hours12, ampm, minutes, seperator, timeFormat) {
-  const hours24 =
-    ampm === "PM" ? (hours12 + 12).toString() : hours12.toString();
-  const hours = timeFormat === "HH:mm" ? hours24 : hours12;
+  const hours24 = convertTo24(hours12, ampm);
+  const hours = ["HH:mm", "H:mm"].includes(timeFormat) ? hours24 : hours12;
+
   const leadZero =
-    !["h:mm", "h:mm A", "HH:mm"].includes(timeFormat) && hours12 < 10
+    (["hh:mm", "hh:mm A"].includes(timeFormat) && hours12 < 10) ||
+    (timeFormat === "HH:mm" && hours24 < 10)
       ? "0"
       : "";
   const trailingSeperator = seperator !== "\n" ? " " : seperator;
@@ -64,7 +73,8 @@ export const clockWidget: WidgetType = {
       { label: "12-hour with AM/PM", value: "h:mm A" },
       { label: "12-hour (with zeros)", value: "hh:mm" },
       { label: "12-hour with AM/PM (with zeros)", value: "hh:mm A" },
-      { label: "24-hour", value: "HH:mm" },
+      { label: "24-hour", value: "H:mm" },
+      { label: "24-hour (with zeros)", value: "HH:mm" },
     ];
 
     return (
@@ -124,7 +134,9 @@ export const clockWidget: WidgetType = {
           options={timeZoneOptions}
           value={widget.clockTimeZone}
           onChange={(value) => {
-            const subText = value.split("/")[value.split("/").length - 1];
+            const subText = value
+              .split("/")
+              [value.split("/").length - 1].replace(/_/g, " ");
             dispatch({
               type: "UPDATE_WIDGET",
               payload: {
