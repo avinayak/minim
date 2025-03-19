@@ -32,3 +32,7 @@ yarn dev
 bash make_extension.sh
 ```
 This will create a zip for chrome and minim_ff_v_<version>.xpi file.
+
+### Links
+* Chrome Web Store - https://chromewebstore.google.com/detail/minim-a-minimal-newtab/kpblgdhkligkbbnbpkigppblggflihgn?hl=en
+* Coming soon to FireFox!
