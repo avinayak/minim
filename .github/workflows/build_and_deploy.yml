@@ -74,7 +74,7 @@ jobs:
         # Copy dist contents into this folder
         cp -r ../dist/* .
 
-        # Optional: echo "yourdomain.com" > CNAME
+        echo "minim.tulv.in" > CNAME
 
         # Commit and push
         git add .
