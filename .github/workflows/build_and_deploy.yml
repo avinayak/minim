@@ -60,12 +60,14 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
 
-        # Switch to temporary branch to avoid messing with current state
+        # Create a temp branch and clean it
         git checkout --orphan temp-gh-pages
         git reset --hard
 
-        # Copy dist contents
+        # Copy dist contents to root
         cp -r dist/* .
+
+        # Optional: echo "yourdomain.com" > CNAME
 
         git add .
         git commit -m "Deploy to GitHub Pages"
@@ -73,5 +75,4 @@ jobs:
         # Force push to gh-pages branch
         git push --force origin temp-gh-pages:gh-pages
 
-        # Return to main branch
-        git checkout main
+        # No need to switch back to main
