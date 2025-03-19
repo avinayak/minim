@@ -1,7 +1,15 @@
-# Minim - Minimalist New Tab Extension
+# Minim - Minimalist New Tab Extension 
+
+for Firefox and Chromium.
+
+![Preview of Minim Extension](minim.png)
+
+The screenshot here is on the Zen browser.
 
 ## Description
 This is the full source code of the Minim extension for Chromium and Firefox browsers.
+
+visit https://minim.tulv.in/ for a preview.
 
 ## Build Instructions
 
@@ -21,6 +29,6 @@ yarn dev
 
 ### 4. Build extension zip and xpi
 ```bash
-sh make_extension.sh
+bash make_extension.sh
 ```
-This will create a zip and minim_ff_v_<version>.xpi file.
+This will create a zip for chrome and minim_ff_v_<version>.xpi file.
