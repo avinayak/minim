@@ -20,7 +20,7 @@ jobs:
       run: yarn install
 
     - name: Build extension
-      run: sh make_extension.sh
+      run: bash make_extension.sh
 
     - name: Get version from version.json
       id: version
