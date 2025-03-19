@@ -55,24 +55,32 @@ jobs:
         asset_name: ${{ steps.findzip.outputs.zip_file }}
         asset_content_type: application/zip
 
-    - name: Deploy to GitHub Pages (gh-pages branch)
+    - name: Deploy dist to GitHub Pages
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
 
-        # Create a temp branch and clean it
-        git checkout --orphan temp-gh-pages
-        git reset --hard
+        # Fetch gh-pages branch if it exists
+        git fetch origin gh-pages
 
-        # Copy dist contents to root
-        cp -r dist/* .
+        # Create a new orphan branch based on gh-pages or start clean
+        git worktree add gh-pages-deploy
+        cd gh-pages-deploy
+        git checkout --orphan gh-pages
+
+        # Clean all files
+        git rm -rf .
+
+        # Copy dist contents into this folder
+        cp -r ../dist/* .
 
         # Optional: echo "yourdomain.com" > CNAME
 
+        # Commit and push
         git add .
-        git commit -m "Deploy to GitHub Pages"
+        git commit -m "Deploy GitHub Pages"
+        git push --force origin gh-pages
 
-        # Force push to gh-pages branch
-        git push --force origin temp-gh-pages:gh-pages
-
-        # No need to switch back to main
+        # Clean up
+        cd ..
+        git worktree remove gh-pages-deploy
