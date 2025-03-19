@@ -17,12 +17,14 @@ export const PhotographyWallpaperPicker = {
       altDescription: "Green Leaves",
       username: "brunocervera",
       color: "green",
-      link: "https://unsplash.com/photos/Rq9X_ZYvBkM"
-    }
+      link: "https://unsplash.com/photos/Rq9X_ZYvBkM",
+    },
   } as WallpaperContextType,
   picker: () => {
     const collections = [
       { label: "Curated by Minim Staff", value: "XwrRKbw8nSI" },
+      { label: "Art", value: "c6re3rTrMTA" },
+      { label: "Monochrome", value: "11492441" },
       { label: "Wallpapers", value: "1459961" },
       { label: "Nature", value: "3330448" },
       { label: "Textures & Patterns", value: "3330445" },

@@ -9,7 +9,9 @@ import {
   useWallpaperFetcher,
 } from "./WallpaperContext";
 
-export const WallpaperSurface = ({ tick }: {}) => {
+export const WallpaperSurface = ({ tick }: {
+  tick: number;
+}) => {
   const trigger = useWallpaperFetcher();
   const triggerNoRefresh = useWallpaperFetcher(true);
   const wallpaper = useWallpaper();

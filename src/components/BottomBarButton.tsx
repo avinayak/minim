@@ -8,7 +8,8 @@ export function BottomBarButton({
 }: {
   icon: string;
   tooltip: string;
-}) {
+} & React.HTMLProps<HTMLButtonElement> 
+) {
   const renderTooltip = (props: TooltipProps) => (
     <Tooltip id="bottom-button-tooltip" {...props}>
       {tooltip}
@@ -21,7 +22,7 @@ export function BottomBarButton({
       delay={{ show: 0, hide: 1 }}
       overlay={renderTooltip}
     >
-      <button className="icon-button" {...props}>
+      <button className="icon-button" type="button" {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
         <Icon path={icon} color="white" size={1} />
       </button>
     </OverlayTrigger>
