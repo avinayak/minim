@@ -10,6 +10,7 @@ import {
 } from "../widgets/GridLayoutContext";
 import { GeneralSettings } from "./GeneralSettings";
 import { Col, Container, Row } from "react-bootstrap";
+import { LabelledSlider } from "../components/Slider";
 
 export const WidgetSettings = ({ selectedWidget }) => {
   const { widgets } = useGridLayout();
@@ -42,6 +43,44 @@ function CellSettings({ cellId }) {
     stacking: "vertical",
   };
 
+  const cardTypesToControls = {
+    none: [],
+    solid: ["border-width", "border-radius"],
+    card: ["border-radius"],
+    glassmorphism: ["border-radius", "blur"],
+    "black-on-white": ["border-radius"],
+    "white-on-black": ["border-radius"],
+  };
+
+  const defaultValues = {
+    none: {},
+    solid: {
+      borderWidth: 5,
+      borderRadius: 0,
+    },
+    card: {
+      borderRadius: 20,
+      verticalPadding: 5,
+      horizontalPadding: 14,
+    },
+    glassmorphism: {
+      borderWidth: 0,
+      borderRadius: 20,
+      verticalPadding: 5,
+      horizontalPadding: 14,
+    },
+    "black-on-white": {
+      borderRadius: 0,
+      verticalPadding: 5,
+      horizontalPadding: 14,
+    },
+    "white-on-black": {
+      borderRadius: 0,
+      verticalPadding: 5,
+      horizontalPadding: 14,
+    },
+  };
+
   return (
     <>
       <br />
@@ -66,14 +105,15 @@ function CellSettings({ cellId }) {
               />
             </Col>
           )}
-          <Col>
+          <hr />
+          <Col md="12">
             <LabelledSelector
               label="Border"
               options={[
                 { label: "None", value: "none" },
                 { label: "Solid", value: "solid" },
-                { label: "Circular", value: "circular" },
                 { label: "Card", value: "card" },
+                { label: "Aero", value: "glassmorphism" },
                 { label: "Back on White", value: "black-on-white" },
                 { label: "White on Black", value: "white-on-black" },
               ]}
@@ -81,12 +121,98 @@ function CellSettings({ cellId }) {
               onChange={(value) => {
                 cellDispatch({
                   type: "UPDATE_CELL",
-                  payload: { ...cell, border: value },
+                  payload: {
+                    ...cell,
+
+                    ...defaultValues[value],
+                    border: value,
+                  },
                   id: cellId,
                 });
               }}
             />
           </Col>
+          {cardTypesToControls[cell.border].includes("border-width") && (
+            <Col md="6">
+              <LabelledSlider
+                label="Border Width"
+                min={1}
+                max={50}
+                onChange={(borderWidth) => {
+                  cellDispatch({
+                    type: "UPDATE_CELL",
+                    payload: { ...cell, borderWidth },
+                    id: cellId,
+                  });
+                }}
+                currentValue={cell.borderWidth}
+              />
+            </Col>
+          )}
+          {cardTypesToControls[cell.border].includes("border-radius") && (
+            <Col md="6">
+              <LabelledSlider
+                label="Border Radius"
+                min={0}
+                max={200}
+                onChange={(borderRadius) => {
+                  cellDispatch({
+                    type: "UPDATE_CELL",
+                    payload: { ...cell, borderRadius },
+                    id: cellId,
+                  });
+                }}
+                currentValue={cell.borderRadius}
+              />
+            </Col>
+          )}
+          {cardTypesToControls[cell.border].includes("blur") && (
+            <Col md="6">
+              <LabelledSlider
+                label="Blur"
+                min={1}
+                max={30}
+                onChange={(blur) => {
+                  cellDispatch({
+                    type: "UPDATE_CELL",
+                    payload: { ...cell, blur },
+                    id: cellId,
+                  });
+                }}
+                currentValue={cell.blur}
+              />
+            </Col>
+          )}
+             <Col md="6">
+              <LabelledSlider
+                label="Vertical Padding"
+                min={1}
+                max={100}
+                onChange={(verticalPadding) => {
+                  cellDispatch({
+                    type: "UPDATE_CELL",
+                    payload: { ...cell, verticalPadding },
+                    id: cellId,
+                  });
+                }}
+                currentValue={cell.verticalPadding}
+              />
+            </Col>
+            <Col md="6">
+              <LabelledSlider
+                label="Horizontal Padding"
+                min={1}
+                max={100}
+                onChange={(horizontalPadding) => {
+                  cellDispatch({
+                    type: "UPDATE_CELL",
+                    payload: { ...cell, horizontalPadding },
+                    id: cellId,
+                  });
+                }}
+                currentValue={cell.horizontalPadding}
+              />
+            </Col>
         </Row>
       </Container>
     </>

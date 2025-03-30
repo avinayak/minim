@@ -12,6 +12,7 @@ const fontOptions = [
   { label: "Circular", value: "Circular" },
   { label: "Futura", value: "Futura" },
   { label: "DIN", value: "DINMediumRegular" },
+  { label: "Inter", value: "Inter" },
   { label: "Cardo Regular", value: "CardoRegular" },
   { label: "Cardo Italic", value: "CardoItalic" },
   { label: "system-ui", value: "system-ui" },

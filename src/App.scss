@@ -117,6 +117,10 @@ body {
   cursor: move;
 }
 
+.wallpapers-controls-pane {
+  min-height: 515px;
+}
+
 .widgets-add {
   text-align: center;
   .widgets-add-container {
@@ -179,10 +183,10 @@ body {
 }
 
 .shade {
-  height: 100vh;
+  height: 75vh;
   width: 100vw;
   position: fixed;
-  top: 0px;
+  bottom: 0px;
   left: 0px;
   background: linear-gradient(
     180deg,
@@ -203,12 +207,11 @@ body {
 
   background: transparent;
   background-image: radial-gradient(
-    hsla(0, 0%, 100%, 0.3411764705882353),
-    1px,
+    hsla(0, 0%, 100%, 0.3),
+    0.5px,
     transparent 0
   );
   background-size: 30px 30px;
-
   transition: opacity 0.5s ease-in-out;
 }
 
@@ -366,13 +369,42 @@ body {
 
     .widget-cell-border-solid {
       border: 0.6em solid #ffffff;
-      padding: 0px 14px;
+      padding: 5px 14px;
+      transition: all 0.3s ease-in-out;
     }
 
     .widget-cell-border-circular {
       border: 0.6em solid #ffffff;
       border-radius: 30px;
       padding: 0px 14px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .widget-cell-border-glassmorphism {
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      border-radius: 100px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 55px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .widget-cell-border-glassmorphism:hover {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0.07)
+      );
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      // transform: translateY(-3px);
     }
 
     .widget-cell-border-card {
@@ -381,19 +413,27 @@ body {
       background-color: #ffffff;
       color: #000000;
       box-shadow: -9px 12px 20px 1px rgba(0, 0, 0, 0.3);
-      padding: 0px 14px;
+      padding: 10px 55px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .widget-cell-border-card:hover {
+      box-shadow: -9px 12px 20px 1px rgba(0, 0, 0, 0.5);
+      // transform: translateY(-3px);
     }
 
     .widget-cell-border-black-on-white {
       background: #ffffff;
       color: #000000;
-      padding: 0px 14px;
+      padding: 5px 14px;
+      transition: all 0.3s ease-in-out;
     }
 
     .widget-cell-border-white-on-black {
       background: #000000;
       color: #ffffff;
-      padding: 0px 14px;
+      padding: 5px 14px;
+      transition: all 0.3s ease-in-out;
     }
 
     .widget-cell-stacking-horizontal-0 {

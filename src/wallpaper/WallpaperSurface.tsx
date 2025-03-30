@@ -63,6 +63,9 @@ export const WallpaperSurface = ({ tick }: {
   document.body.style.backgroundImage = `${wallpaper.backgroundImage} !important`;
   document.body.style.background = `${wallpaper.background} !important`;
 
+  const textureDensity = wallpaper.textureDensity || 20;
+  const textureSize = 0.5 + (textureDensity - 2)/40;
+
   return (
     <div>
       <div
@@ -81,6 +84,8 @@ export const WallpaperSurface = ({ tick }: {
         className="dots"
         style={{
           opacity: wallpaper.texture ? 1 : 0,
+          backgroundSize: `${textureDensity}px ${textureDensity}px`,
+          backgroundImage: `radial-gradient(hsla(0, 0%, 100%, 0.3), ${textureSize}px, transparent 0)`,
         }}
       ></div>
       <div

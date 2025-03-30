@@ -88,10 +88,45 @@ export function WidgetGrid({
     const cellId = `${x}-${y}`;
     const widgetCellId = `widget-cell-${cellId}`;
 
+    const currentCell = cells[cellId];
+
     const stackingClass = (cells, cellId) =>
-      cells[cellId] && cells[cellId].stacking === "horizontal"
+      currentCell && currentCell.stacking === "horizontal"
         ? `widget-cell-stacking-horizontal-${cellId.split("-")[1]}`
         : "";
+
+    let borderStyle = {};
+    let padding = {
+      padding: currentCell?.verticalPadding && currentCell?.horizontalPadding
+        ? `${currentCell.verticalPadding}px ${currentCell.horizontalPadding}px`
+        : "0px",
+       
+    };
+    if (currentCell) {
+      if (currentCell.border === "solid") {
+        borderStyle = {
+          border: currentCell.borderWidth && `${currentCell.borderWidth}px solid`,
+          borderRadius: currentCell.borderRadius && `${currentCell.borderRadius}px`,
+        };
+      } else if (currentCell.border === "card") {
+        borderStyle = {
+          borderRadius: currentCell.borderRadius && `${currentCell.borderRadius}px`,
+        };
+      } else if (currentCell.border === "glassmorphism") {
+        borderStyle = {
+          borderRadius: currentCell.borderRadius && `${currentCell.borderRadius}px`,
+          backdropFilter: currentCell.blur && `blur(${currentCell.blur}px)`,
+        };
+      } else if (currentCell.border === "black-on-white") {
+        borderStyle = {
+          borderRadius: currentCell.borderRadius && `${currentCell.borderRadius}px`,
+        };
+      } else if (currentCell.border === "white-on-black") {
+        borderStyle = {
+          borderRadius: currentCell.borderRadius && `${currentCell.borderRadius}px`,
+        };
+      }
+    }
 
     return (
       <div
@@ -105,9 +140,11 @@ export function WidgetGrid({
         <div
           style={{
             fontSize: maxFontSize * 2,
+            ...borderStyle,
+            ...padding,
           }}
           className={`widget-cell-inner ${
-            cells[cellId] ? `widget-cell-border-${cells[cellId].border}` : ""
+            currentCell ? `widget-cell-border-${currentCell.border}` : ""
           } ${stackingClass(cells, cellId)}`}
         >
           {renderedWidgetsForCell}

@@ -92,7 +92,7 @@ export function LocationSelector({
 
   return (
     <div>
-      <Form.Label>{label}</Form.Label>
+      <Form.Label style={{userSelect: "none"}}>{label}</Form.Label>
       <AsyncSelect
         cacheOptions
         loadOptions={loadOptions}

@@ -26,6 +26,7 @@ export const WallpaperPicker = () => {
 
   return (
     <>
+      <div className="background-controls-panel">
       <LabelledSelector
         label="Wallpaper Type"
         value={wallpaperState.wallpaperType}
@@ -46,7 +47,7 @@ export const WallpaperPicker = () => {
       {wallpaperState.wallpaperType === "photography" && (
         <LabelledSelector
           label="Change every"
-          value={wallpaperState.changeEvery}
+          value={wallpaperState.changeEvery || "never"}
           options={[
             { label: "Never", value: "never" },
             { label: "Minute", value: "1_minute" },
@@ -112,6 +113,26 @@ export const WallpaperPicker = () => {
         }}
         currentValue={wallpaperState.shade}
       />
+
+      {wallpaperState.texture && (
+        <LabelledSlider
+          label="Texture Density"
+          min={3}
+          max={40}
+          step={2}
+          onChange={(textureDensity) => {
+            wallpaperDispatch({
+              type: "UPDATE_WALLPAPER",
+              payload: {
+                ...wallpaperState,
+                textureDensity,
+              },
+            });
+          }}
+          currentValue={wallpaperState.textureDensity}
+        />
+      )}
+      </div>
       <BackgroundToggles />
     </>
   );

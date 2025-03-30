@@ -13,7 +13,7 @@ export function LabelledSelector({
 }) {
   return (
     <div className="labelled-selector">
-      <FormLabel>{label}</FormLabel>
+      <FormLabel style={{userSelect: "none"}}>{label}</FormLabel>
       <Form.Select
         value={value}
         onChange={(e) => {

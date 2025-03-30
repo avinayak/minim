@@ -5,6 +5,10 @@ export type WallpaperContextType = {
     wallpaperType: WallpaperTypeType;
     fetchStarted?: boolean;
     font?: string;
+    changeEvery?: "never" | "new_tab" | "daily" | "weekly" | "hour" | "minute";
+    backgroundImage?: string;
+    background?: string;
+    blendMode?: string;
 }
 
 export type WallpaperActionType = {

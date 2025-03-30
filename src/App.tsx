@@ -5,11 +5,13 @@ import {
   useWallpaperFetcher,
   WallpaperProvider,
 } from "./wallpaper/WallpaperContext";
+import version from "./version.json";
+
 import { Settings } from "./Settings";
 import { WallpaperSurface } from "./wallpaper/WallpaperSurface";
 import { WidgetProvider } from "./widgets/GridLayoutContext";
 import { CategoryTypes, SourceTypes } from "./gql/graphql";
-import { mdiCog, mdiFire, mdiShimmer } from "@mdi/js";
+import { mdiAlertDecagram, mdiCog, mdiFire, mdiShimmer } from "@mdi/js";
 import { BottomBarButton } from "./components/BottomBarButton";
 import { WallpaperInfoSpinner } from "./WallpaperInfoSpinner";
 import { WidgetGrid } from "./widgets/WIdgetGrid";
@@ -27,9 +29,7 @@ export function App() {
   const [droppingWidgetData, setDroppingWidgetData] = useState<string | null>(
     null
   );
-  const [selectedWidget, setSelectedWidget] = useState<string | null>(
-    "1680393526778"
-  );
+  const [selectedWidget, setSelectedWidget] = useState<string>("1580396533586");
 
   return (
     <div className="App">
@@ -43,29 +43,31 @@ export function App() {
               />
             )}
 
-           <div className="main-surface">
-             <WidgetGrid
-              tick={tick}
-              setDroppingWidgetData={setDroppingWidgetData}
-              unlocked={settingsOpen}
-              droppingWidgetData={droppingWidgetData}
-              selectedWidget={selectedWidget}
-              setSelectedWidget={setSelectedWidget}
-              settingsOpen={settingsOpen}
-            />
-            <div className="bottom">
-              <div className="bottom-left">
-                <WallpaperInfoSpinner />
-              </div>
-              <div className="bottom-right">
-                <SettingsButton
-                  setSettingsOpen={setSettingsOpen}
-                  settingsOpen={settingsOpen}
-                />
-                <RefreshWallpaperButton />
+            <div className="main-surface">
+              <WidgetGrid
+                tick={tick}
+                setDroppingWidgetData={setDroppingWidgetData}
+                unlocked={settingsOpen}
+                droppingWidgetData={droppingWidgetData}
+                selectedWidget={selectedWidget}
+                setSelectedWidget={setSelectedWidget}
+                settingsOpen={settingsOpen}
+              />
+              <div className="bottom">
+                <div className="bottom-left">
+                  <WallpaperInfoSpinner />
+                </div>
+                <div className="bottom-right">
+                  <ChangeLogButton />
+                  <SettingsButton
+                    setSettingsOpen={setSettingsOpen}
+                    settingsOpen={settingsOpen}
+                  />
+                  <RefreshWallpaperButton />
+                  {/* <ResetAppButton /> */}
+                </div>
               </div>
             </div>
-           </div>
             <WallpaperSurface tick={tick} />
           </WidgetProvider>
         </WallpaperProvider>
@@ -118,6 +120,30 @@ export const ResetAppButton = () => {
       }}
       tooltip="Reset App"
       icon={mdiFire}
+    />
+  );
+};
+
+export const ChangeLogButton = () => {
+  const localStorageChangelogRead = localStorage.getItem(
+    `changelog-${version.version.replace(/\./g, "_")}-read`
+  );
+
+  if(localStorageChangelogRead === "true") {
+    return null;
+  }
+
+  return (
+    <BottomBarButton
+      onClick={() => {
+        localStorage.setItem(
+          `changelog-${version.version.replace(/\./g, "_")}-read`,
+          "true"
+        );
+        window.open(`https://github.com/avinayak/minim/wiki/Changelog`);
+      }}
+      tooltip={`What's new in ${version.version}`}
+      icon={mdiAlertDecagram}
     />
   );
 };

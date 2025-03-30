@@ -33,7 +33,7 @@ export function LabelledTextInput({
 
   return (
     <>
-      <Form.Label>{label}</Form.Label>
+      <Form.Label style={{userSelect: "none"}}>{label}</Form.Label>
       {textInput}
       {helpText && <Form.Text muted>{helpText}</Form.Text>}
       <br />

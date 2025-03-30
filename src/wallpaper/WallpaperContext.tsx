@@ -38,6 +38,7 @@ export function WallpaperProvider({ children }: { children: React.ReactNode }) {
     font: "Product",
     tint: 3,
     shade: 3,
+    textureDensity: 20,
     changeEvery: "hour",
   } as WallpaperContextType;
 

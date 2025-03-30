@@ -15,7 +15,7 @@ export function LabelledButtonGroup({
 }) {
   return (
     <div className="labelled-form-element">
-      <FormLabel>{label}</FormLabel>
+      <FormLabel style={{userSelect: "none"}}>{label}</FormLabel>
       <br />
       <ButtonGroup aria-label="Basic example">
         {buttonStates.map((state) => (

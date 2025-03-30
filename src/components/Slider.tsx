@@ -4,7 +4,7 @@ import "rc-slider/assets/index.css";
 export function LabelledSlider({ label, onChange, currentValue, ...props }) {
   return (
     <div className="labelled-form-element">
-      {label}
+      <span style={{userSelect: "none"}}>{label}</span>
       <Slider
         value={currentValue}
         onChange={(newValue) => {
