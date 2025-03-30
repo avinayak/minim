@@ -29,12 +29,15 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-    - name: Find zip file
-      id: findzip
+    - name: Find zip and xpi files
+      id: findfiles
       run: |
         ZIP_FILE=$(ls *.zip | head -n 1)
+        XPI_FILE=$(ls *.xpi | head -n 1)
         echo "ZIP_FILE=$ZIP_FILE" >> $GITHUB_ENV
         echo "zip_file=$ZIP_FILE" >> $GITHUB_OUTPUT
+        echo "XPI_FILE=$XPI_FILE" >> $GITHUB_ENV
+        echo "xpi_file=$XPI_FILE" >> $GITHUB_OUTPUT
 
     - name: Create GitHub release
       id: create_release
@@ -45,15 +48,25 @@ jobs:
         tag_name: v${{ steps.version.outputs.version }}
         release_name: Release v${{ steps.version.outputs.version }}
 
-    - name: Upload release asset
+    - name: Upload zip release asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ steps.findzip.outputs.zip_file }}
-        asset_name: ${{ steps.findzip.outputs.zip_file }}
+        asset_path: ./${{ steps.findfiles.outputs.zip_file }}
+        asset_name: ${{ steps.findfiles.outputs.zip_file }}
         asset_content_type: application/zip
+
+    - name: Upload xpi release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./${{ steps.findfiles.outputs.xpi_file }}
+        asset_name: ${{ steps.findfiles.outputs.xpi_file }}
+        asset_content_type: application/x-xpinstall
 
     - name: Deploy dist to GitHub Pages
       run: |
