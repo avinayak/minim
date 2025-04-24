@@ -5,6 +5,7 @@ import { weatherWidget } from "./weather";
 import { timeOfDayWish } from "./timeOfDayWish";
 import { timerWidget } from "./timer";
 import { linkWidget } from "./link";
+import { iconWidget } from "./icon";
 import { dateWidget } from "./date";
 
 
@@ -18,6 +19,7 @@ export const widgetKeyMap: WidgetMapType = () =>( {
   wish: timeOfDayWish,
   timer: timerWidget,
   link: linkWidget,
+  icon: iconWidget,
 });
 
 export const widgetKeys: WidgetCodeType[] = Object.keys(
