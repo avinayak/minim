@@ -4,20 +4,27 @@ import { WidgetType } from "../types";
 import { useGridLayoutDispatch } from "./GridLayoutContext";
 
 function getTimeBasedGreeting() {
-  const currentHour = new Date().getHours();
-  let greeting;
+  const hour = new Date().getHours();
 
-  if (currentHour >= 5 && currentHour < 12) {
-    greeting = "Good Morning";
-  } else if (currentHour >= 12 && currentHour < 18) {
-    greeting = "Good Afternoon";
-  } else if (currentHour >= 17 && currentHour < 22) {
-    greeting = "Good Evening";
-  } else {
-    greeting = "Good Night";
-  }
+  const greetings = [
+    { range: [4, 6], text: "You're up early!" },
+    { range: [6, 8], text: "Top of the morning!" },
+    { range: [8, 11], text: "Good morning" },
+    { range: [11, 13], text: "Happy late morning" },
+    { range: [13, 15], text: "Good early afternoon" },
+    { range: [15, 17], text: "Good afternoon" },
+    { range: [17, 19], text: "Hope you're having a nice evening" },
+    { range: [19, 21], text: "Good evening" },
+    { range: [21, 23], text: "Winding down? Good night" },
+    { range: [23, 24], text: "It's late — time to rest" },
+    { range: [0, 1], text: "It's late — time to rest" },
+    { range: [1, 4], text: "Burning the midnight oil?" }
+  ];
 
-  return greeting;
+
+  const greeting = greetings.find(g => hour >= g.range[0] && hour < g.range[1])?.text || "Hello";
+
+  return `${greeting}`;
 }
 
 export const timeOfDayWish: WidgetType = {
@@ -63,7 +70,7 @@ export const timeOfDayWish: WidgetType = {
   ),
   preview: () => (
     <div>
-      <div style={{ fontSize: "20px" }}>{getTimeBasedGreeting()}</div>
+      <div style={{ fontSize: "20px" }}>Good Morning</div>
     </div>
   ),
 };

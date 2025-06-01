@@ -162,13 +162,38 @@ body {
 .wallpaper {
   height: 100vh;
   width: 100vw;
-  transition: background 0.5s ease-in-out;
+  transition: background-image 0.5s ease-in-out;
   position: fixed;
   top: 0px;
   left: 0px;
-  background-color: #747bff;
+  background-color: #ffffff;
   z-index: 0;
+  background-size: cover;
+}
+
+/* Image fit classes for local wallpapers */
+.wallpaper.image-fit-cover {
   background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+}
+
+.wallpaper.image-fit-contain {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+}
+
+.wallpaper.image-fit-stretch {
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+}
+
+.wallpaper.image-fit-center {
+  background-size: auto !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
 }
 
 .tint {

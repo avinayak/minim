@@ -9,6 +9,13 @@ export type WallpaperContextType = {
     backgroundImage?: string;
     background?: string;
     blendMode?: string;
+    fit?: "contain" | "center" | "stretch" | "cover";
+    grayScale?: boolean;
+    texture?: boolean;
+    tint?: number;
+    shade?: number;
+    textureDensity?: number;
+    meta?: any;
 }
 
 export type WallpaperActionType = {
@@ -16,4 +23,4 @@ export type WallpaperActionType = {
     payload: WallpaperContextType;
 }
 
-export type WallpaperTypeType = "colors" | "gradients" | "photography";
+export type WallpaperTypeType = "colors" | "gradients" | "photography" | "local_file";

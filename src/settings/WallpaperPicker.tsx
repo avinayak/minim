@@ -10,6 +10,7 @@ import {
 import { BackgroundToggles } from "./BackgroundToggles";
 import { FlatWallpaperPicker } from "./WallpaperPickers/FlatWallpaperPicker";
 import { GradientWallpaperPicker } from "./WallpaperPickers/GradientWallpaperPicker";
+import { LocalFileWallpaperPicker } from "./WallpaperPickers/LocalFileWallpaperPicker";
 import { PhotographyWallpaperPicker } from "./WallpaperPickers/PhotographyWallpaperPicker";
 
 export const WallpaperPicker = () => {
@@ -20,6 +21,7 @@ export const WallpaperPicker = () => {
     { label: "Colors", value: "colors" },
     { label: "Gradients", value: "gradients" },
     { label: "Photography", value: "photography" },
+    { label: "Local file", value: "local_file" },
   ];
 
   const walppaperPicker = wallpaperSwitch(wallpaperState.wallpaperType);
@@ -146,6 +148,8 @@ const wallpaperSwitch = (wallpaperType: WallpaperTypeType) => {
       return GradientWallpaperPicker;
     case "photography":
       return PhotographyWallpaperPicker;
+    case "local_file":
+      return LocalFileWallpaperPicker;
     default:
       return FlatWallpaperPicker;
   }
