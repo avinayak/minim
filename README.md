@@ -35,4 +35,4 @@ This will create a zip for chrome and minim_ff_v_<version>.xpi file.
 
 ### Links
 * Chrome Web Store - https://chromewebstore.google.com/detail/minim-a-minimal-newtab/kpblgdhkligkbbnbpkigppblggflihgn?hl=en
-* Coming soon to Firefox!
+* Firefox Addons - https://addons.mozilla.org/en-US/firefox/addon/minim-minimalist-new-tab/
