@@ -72,13 +72,54 @@ export const LocalFileWallpaperPicker = {
           <label htmlFor="wallpaper-file" style={{ display: 'block', marginBottom: '8px' }}>
             Select Wallpaper Image
           </label>
-          <input
-            id="wallpaper-file"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            style={{ width: '100%' }}
-          />
+          <div style={{ position: 'relative' }}>
+            <input
+              id="wallpaper-file"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ 
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                opacity: 0,
+                cursor: 'pointer',
+                zIndex: 1
+              }}
+            />
+            <div style={{
+              border: '2px dashed #ccc',
+              borderRadius: '8px',
+              padding: '20px',
+              textAlign: 'center',
+              backgroundColor: '#f9f9f9',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              minHeight: '60px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              gap: '8px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#007acc';
+              e.currentTarget.style.backgroundColor = '#f0f8ff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#ccc';
+              e.currentTarget.style.backgroundColor = '#f9f9f9';
+            }}
+            >
+              <div style={{ fontSize: '24px', color: '#666' }}>📁</div>
+              <div style={{ color: '#666', fontSize: '14px' }}>
+                Click to select an image file
+              </div>
+              <div style={{ color: '#999', fontSize: '12px' }}>
+                Supports JPG, PNG, GIF, etc. (Max 20MB)
+              </div>
+            </div>
+          </div>
         </div>
 
         <LabelledSelector
