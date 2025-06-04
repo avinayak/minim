@@ -1,6 +1,6 @@
 type TwoLineWidgetProps = {
   text: string;
-  subText: string;
+  subText?: string;
   fontSize: number;
 };
 

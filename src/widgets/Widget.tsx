@@ -6,6 +6,7 @@ import { timeOfDayWish } from "./timeOfDayWish";
 import { timerWidget } from "./timer";
 import { linkWidget } from "./link";
 import { dateWidget } from "./date";
+import { japaneseMicroseasonsWidget } from "./japaneseMicroseasonsWidget";
 
 
 import "rc-slider/assets/index.css";
@@ -18,6 +19,7 @@ export const widgetKeyMap: WidgetMapType = () =>( {
   wish: timeOfDayWish,
   timer: timerWidget,
   link: linkWidget,
+  japaneseMicroseasons: japaneseMicroseasonsWidget,
 });
 
 export const widgetKeys: WidgetCodeType[] = Object.keys(

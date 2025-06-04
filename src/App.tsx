@@ -58,7 +58,7 @@ export function App() {
                   <WallpaperInfoSpinner />
                 </div>
                 <div className="bottom-right">
-                  <ChangeLogButton />
+                  {/* <ChangeLogButton /> */}
                   <SettingsButton
                     setSettingsOpen={setSettingsOpen}
                     settingsOpen={settingsOpen}

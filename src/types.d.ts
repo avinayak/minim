@@ -1,4 +1,3 @@
-
 export interface GeneralWidgetPropertiesType {
     widgetCode: WidgetCodeType;
     subText?: string;
@@ -21,3 +20,35 @@ export interface GeneralWidgetPropertiesType {
   export interface MessageWidgetPropertiesType extends WidgetStateType {
     messageText: string;
   }
+
+  export type WidgetCodeType = 
+    | "clock" 
+    | "date" 
+    | "message" 
+    | "weather" 
+    | "wish" 
+    | "timer" 
+    | "link"
+    | "japaneseMicroseasons";
+
+  export interface Layout {
+    x: number;
+    y: number;
+  }
+
+  export type WidgetPropertiesType = GeneralWidgetPropertiesType & {
+    id?: string;
+    layout?: Layout;
+    [key: string]: any;
+  };
+
+  export interface WidgetType {
+    widgetCode: WidgetCodeType;
+    widgetName: string;
+    initialState: () => WidgetPropertiesType;
+    settingsForm: (widget: WidgetPropertiesType) => JSX.Element;
+    renderWidget: (widget: WidgetPropertiesType, tick?: number, unlocked?: boolean) => JSX.Element;
+    preview: (widget?: WidgetPropertiesType) => JSX.Element;
+  }
+
+  export type WidgetMapType = () => Record<WidgetCodeType, WidgetType>;
