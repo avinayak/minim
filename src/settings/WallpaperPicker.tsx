@@ -4,6 +4,7 @@ import { intervalToMicroseconds } from "../data/intervals";
 import { WallpaperTypeType } from "../wallpaper/types";
 
 import {
+  cancelPendingWallpaperFetches,
   useWallpaper,
   useWallpaperDispatch,
 } from "../wallpaper/WallpaperContext";
@@ -34,10 +35,12 @@ export const WallpaperPicker = () => {
         value={wallpaperState.wallpaperType}
         options={wallpaperTypeOptions}
         onChange={(wallpaperType) => {
+          cancelPendingWallpaperFetches();
           const newWallpaperType = wallpaperType as WallpaperTypeType;
           const payload = {
             ...wallpaperState,
             ...wallpaperSwitch(newWallpaperType).initialWallpaper,
+            fetchStarted: false,
           };
           wallpaperDispatch({
             type: "UPDATE_WALLPAPER",

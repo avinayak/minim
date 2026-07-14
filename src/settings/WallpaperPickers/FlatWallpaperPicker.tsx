@@ -41,7 +41,7 @@ export const FlatWallpaperPicker = {
 
         <LabelledSelector
           label="Color"
-          value={wallpaperState.newWallpaper}
+          value={wallpaperState.wallpaperName || ""}
           options={categoryColors}
           onChange={(newWallpaper) => {
             const { b: newWallpaperBackground, f: newTextColor } =

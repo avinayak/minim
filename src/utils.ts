@@ -3,9 +3,11 @@ export function capitalizeFirstLetter(str: string) {
 }
 
 export function addUnsplashScalingParams(url: string) {
-  const width = screen.width;
-  const height = screen.height;
-  return `${url.split("?")[0]}?fit=crop&w=${width}&h=${height}`;
+  const scaledUrl = new URL(url);
+  scaledUrl.searchParams.set("fit", "crop");
+  scaledUrl.searchParams.set("w", screen.width.toString());
+  scaledUrl.searchParams.set("h", screen.height.toString());
+  return scaledUrl.toString();
 }
 
 export function omit(obj: any, keys: string[]) {

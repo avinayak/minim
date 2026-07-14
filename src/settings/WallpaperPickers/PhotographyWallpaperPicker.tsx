@@ -1,15 +1,17 @@
 import { LabelledSelector } from "../../components/LabelledSelector";
-import { CategoryTypes, SourceTypes } from "../../gql/graphql";
 import { WallpaperContextType } from "../../wallpaper/types";
 import {
+  cancelPendingWallpaperFetches,
   useWallpaper,
-  useWallpaperFetcher,
+  useWallpaperDispatch,
 } from "../../wallpaper/WallpaperContext";
+import { PhotographyGallery } from "./PhotographyGallery";
 
 export const PhotographyWallpaperPicker = {
   initialWallpaper: {
     background: `url('https://images.unsplash.com/photo-1558826944-1e802b66a7d8?fit=crop&w=${screen.width}&h=${screen.height}'`,
     wallpaperType: "photography",
+    wallpaperId: "Rq9X_ZYvBkM",
     wallpaperCategory: "XwrRKbw8nSI",
     color: "white",
     meta: {
@@ -37,33 +39,27 @@ export const PhotographyWallpaperPicker = {
     ];
 
     const wallpaper = useWallpaper();
-    const trigger = useWallpaperFetcher();
+    const wallpaperDispatch = useWallpaperDispatch();
+    const category = wallpaper.wallpaperCategory || collections[0].value;
     return (
       <>
         <LabelledSelector
           label="Category"
-          value={wallpaper.wallpaperCategory}
+          value={category}
           options={collections}
           onChange={(newCollection) => {
-            trigger({
-              source: SourceTypes.Unsplash,
-              query: newCollection,
-              category: CategoryTypes.Collection,
+            cancelPendingWallpaperFetches();
+            wallpaperDispatch({
+              type: "UPDATE_WALLPAPER",
+              payload: {
+                ...wallpaper,
+                wallpaperCategory: newCollection,
+                fetchStarted: false,
+              },
             });
           }}
         />
-
-        {/* <button
-          onClick={() => {
-            trigger({
-              source: SourceTypes.Unsplash,
-              query: wallpaper.wallpaperCategory,
-              category: CategoryTypes.Collection,
-            });
-          }}
-        >
-          Refresh Wallpaper
-        </button> */}
+        <PhotographyGallery category={category} />
       </>
     );
   },

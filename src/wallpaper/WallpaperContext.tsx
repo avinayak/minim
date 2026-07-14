@@ -1,16 +1,21 @@
 import { useLazyQuery } from "@apollo/client";
-import { createContext, useCallback, useContext, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+  useRef,
+} from "react";
 import {
   RandomImageQueryDocument,
   RandomImageQueryQueryVariables,
 } from "../gql/graphql";
 import { addUnsplashScalingParams, omit } from "../utils";
-import {
-  doesStoreHaveUnviewedImages,
-  fetchLatestImage,
-  storeImage,
-} from "./image-store";
 import { WallpaperActionType, WallpaperContextType } from "./types";
+import {
+  photographyImageMetadata,
+  trackPhotographySelection,
+} from "./wallpaper";
 
 const WallpaperContext = createContext<WallpaperContextType>({
   wallpaperType: "photography",
@@ -20,12 +25,19 @@ const WallpaperDispatchContext = createContext<
   React.Dispatch<WallpaperActionType>
 >(() => {});
 
+let wallpaperFetchGeneration = 0;
+
+export function cancelPendingWallpaperFetches() {
+  wallpaperFetchGeneration += 1;
+}
+
 export function WallpaperProvider({ children }: { children: React.ReactNode }) {
   let defaultWallpaper = {
     background: `url('https://images.unsplash.com/photo-1558826944-1e802b66a7d8?fit=crop&w=${screen.width}&h=${screen.height}'`,
     grayScale: false,
     texture: false,
     wallpaperType: "photography",
+    wallpaperId: "Rq9X_ZYvBkM",
     wallpaperCategory: "XwrRKbw8nSI",
     color: "white",
     meta: {
@@ -111,121 +123,63 @@ function wallpaperReducer(
   return updatedWallpaperState;
 }
 
-export function useSilentWallpaperFetcher() {
-  const [getRandomImage] = useLazyQuery(RandomImageQueryDocument, {
-    onCompleted: async (response) => {
-      const randomImage = response.randomImage;
-
-      randomImage &&
-        randomImage.urls?.full &&
-        (await storeImage(
-          addUnsplashScalingParams(randomImage.urls.full),
-          randomImage
-        ));
-    },
-  });
+export function useWallpaperFetcher() {
+  const wallpaperDispatch = useWallpaperDispatch();
+  const wallpaperState = useWallpaper();
+  const wallpaperStateRef = useRef(wallpaperState);
+  wallpaperStateRef.current = wallpaperState;
+  const [getRandomImage] = useLazyQuery(RandomImageQueryDocument);
 
   const fetchRandomImage = useCallback(
-    (variables: RandomImageQueryQueryVariables) => {
-      doesStoreHaveUnviewedImages().then((result) => {
-        if (!result) {
-          getRandomImage({
-            fetchPolicy: "no-cache",
-            variables,
-          });
-        }
+    async (variables: RandomImageQueryQueryVariables) => {
+      wallpaperFetchGeneration += 1;
+      const requestGeneration = wallpaperFetchGeneration;
+      const nextWallpaper = {
+        ...wallpaperStateRef.current,
+        wallpaperCategory: variables.query,
+        fetchStarted: true,
+      };
+      wallpaperStateRef.current = nextWallpaper;
+      wallpaperDispatch({
+        type: "UPDATE_WALLPAPER",
+        payload: nextWallpaper,
       });
+
+      try {
+        const response = await getRandomImage({
+          fetchPolicy: "no-cache",
+          variables,
+        });
+        if (requestGeneration !== wallpaperFetchGeneration) return;
+
+        const randomImage = response.data?.randomImage;
+        wallpaperDispatch({
+          type: "UPDATE_WALLPAPER",
+          payload: randomImage?.urls?.full
+            ? {
+                ...wallpaperStateRef.current,
+                wallpaperId: randomImage.id,
+                meta: photographyImageMetadata(randomImage),
+                background: `url('${addUnsplashScalingParams(
+                  randomImage.urls.full
+                )}')`,
+                color: "white",
+                fetchStarted: false,
+              }
+            : { ...wallpaperStateRef.current, fetchStarted: false },
+        });
+
+        if (randomImage?.urls?.full) trackPhotographySelection(randomImage);
+      } catch {
+        if (requestGeneration !== wallpaperFetchGeneration) return;
+        wallpaperDispatch({
+          type: "UPDATE_WALLPAPER",
+          payload: { ...wallpaperStateRef.current, fetchStarted: false },
+        });
+      }
     },
     [getRandomImage]
   );
 
   return fetchRandomImage;
-}
-
-export function useWallpaperFetcher(noRefresh = false) {
-  const wallpaperDispatch = useWallpaperDispatch();
-  const wallpaperState = useWallpaper();
-  const [getRandomImage] = useLazyQuery(RandomImageQueryDocument, {
-    onCompleted: async (response) => {
-      const randomImage = response.randomImage;
-      const meta =
-        randomImage && randomImage.links
-          ? {
-              link: randomImage.links?.download
-                ?.split("/")
-                .slice(0, -1)
-                .join("/"),
-              fullName: (randomImage.user?.lastName
-                ? randomImage.user?.firstName + " " + randomImage.user?.lastName
-                : randomImage.user?.firstName
-              ).trim(),
-              description: randomImage.description,
-              altDescription: randomImage.altDescription,
-              username: randomImage.user?.username,
-              color: randomImage.color,
-              exif: randomImage.exif,
-              location: randomImage.location,
-              userLink: randomImage.user?.links?.html,
-            }
-          : undefined;
-      randomImage &&
-        randomImage.urls?.full &&
-        (await storeImage(
-          addUnsplashScalingParams(randomImage.urls.full),
-          meta
-        ));
-
-      fetchLatestImage().then(
-        noRefresh
-          ? () => {}
-          : ({ wallpaper_url, meta: metadata }) => {
-              wallpaperDispatch({
-                type: "UPDATE_WALLPAPER",
-                payload: {
-                  ...wallpaperState,
-                  meta: metadata,
-                  background: `url('${wallpaper_url}')`,
-                  color: "white",
-                  fetchStarted: false,
-                },
-              });
-            }
-      );
-    },
-  });
-
-  const fetchRandomImage = useCallback(
-    (variables: RandomImageQueryQueryVariables) => {
-      wallpaperDispatch({
-        type: "UPDATE_WALLPAPER",
-        payload: {
-          ...wallpaperState,
-          wallpaperCategory: variables.query,
-          fetchStarted: true,
-        },
-      });
-      getRandomImage({
-        fetchPolicy: "no-cache",
-        variables,
-      });
-    },
-    [getRandomImage, wallpaperState]
-  );
-
-  return fetchRandomImage;
-}
-
-export function refreshWallpaperfromStore(wallpaper, wallpaperDispatch) {
-  fetchLatestImage().then(({ wallpaper_url, meta }) => {
-    wallpaperDispatch({
-      type: "UPDATE_WALLPAPER",
-      payload: {
-        ...wallpaper,
-        meta,
-        background: `url('${wallpaper_url}')`,
-        color: "white",
-        fetchStarted: false,
-      },
-    });
-  });
 }
