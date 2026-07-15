@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { intervalToMicroseconds } from "../data/intervals";
 import { CategoryTypes, SourceTypes } from "../gql/graphql";
 import { pick } from "../utils";
 import {
-  refreshWallpaperfromStore,
   useWallpaper,
-  useWallpaperDispatch,
   useWallpaperFetcher,
 } from "./WallpaperContext";
 import { getLocalImage } from "./local-image-store";
@@ -14,11 +12,9 @@ export const WallpaperSurface = ({ tick }: {
   tick: number;
 }) => {
   const trigger = useWallpaperFetcher();
-  const triggerNoRefresh = useWallpaperFetcher(true);
   const wallpaper = useWallpaper();
   const [resolvedBackground, setResolvedBackground] = useState<string>(wallpaper.background || '');
-
-  const wallpaperDispatch = useWallpaperDispatch();
+  const fetchedForNewTab = useRef(false);
 
   // Effect to resolve local image references
   useEffect(() => {
@@ -41,9 +37,13 @@ export const WallpaperSurface = ({ tick }: {
   }, [wallpaper.background]);
 
   useEffect(() => {
-    if (wallpaper.changeEvery === "new_tab") {
-      refreshWallpaperfromStore(wallpaper, wallpaperDispatch);
-      triggerNoRefresh({
+    if (
+      wallpaper.wallpaperType === "photography" &&
+      wallpaper.changeEvery === "new_tab" &&
+      !fetchedForNewTab.current
+    ) {
+      fetchedForNewTab.current = true;
+      trigger({
         source: SourceTypes.Unsplash,
         query: wallpaper.wallpaperCategory || "landscape",
         category: CategoryTypes.Collection,
@@ -53,7 +53,9 @@ export const WallpaperSurface = ({ tick }: {
 
   useEffect(() => {
     if (
+      !wallpaper.changeEvery ||
       wallpaper.changeEvery === "never" ||
+      wallpaper.changeEvery === "new_tab" ||
       wallpaper.wallpaperType !== "photography"
     )
       return;
@@ -69,7 +71,7 @@ export const WallpaperSurface = ({ tick }: {
       );
       trigger({
         source: SourceTypes.Unsplash,
-        query: wallpaper.wallpaperCategory,
+        query: wallpaper.wallpaperCategory || "landscape",
         category: CategoryTypes.Collection,
       });
     }
